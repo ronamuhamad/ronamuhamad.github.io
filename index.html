@@ -1,0 +1,2705 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PC Builder Tycoon</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        :root {
+            --bg-primary: #1a1a1a;
+            --bg-secondary: #242424;
+            --bg-card: #2a2a2a;
+            --accent-primary: #3b82f6;
+            --accent-secondary: #8b5cf6;
+            --accent-success: #10b981;
+            --accent-warning: #f59e0b;
+            --text-primary: #ffffff;
+            --text-secondary: #9ca3af;
+            --border: #404040;
+            --shadow: rgba(0, 0, 0, 0.3);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+            background: var(--bg-primary);
+            color: var(--text-primary);
+            min-height: 100vh;
+            overflow-x: hidden;
+        }
+
+        .container {
+            position: relative;
+            z-index: 1;
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        /* Header */
+        header {
+            background: var(--bg-secondary);
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            padding: 20px 30px;
+            margin-bottom: 20px;
+            box-shadow: 0 2px 8px var(--shadow);
+        }
+
+        .header-content {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 20px;
+        }
+
+        h1 {
+            font-size: 1.8em;
+            font-weight: 700;
+            color: var(--text-primary);
+        }
+
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+            gap: 15px;
+            flex: 1;
+            max-width: 600px;
+        }
+
+        .stat-card {
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            border-radius: 6px;
+            padding: 12px 16px;
+            text-align: center;
+        }
+
+        .stat-label {
+            font-size: 0.75em;
+            color: var(--text-secondary);
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            margin-bottom: 4px;
+        }
+
+        .stat-value {
+            font-size: 1.3em;
+            font-weight: 700;
+            color: var(--accent-primary);
+        }
+
+        .lang-switch {
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            border-radius: 6px;
+            padding: 8px 16px;
+            color: var(--text-primary);
+            font-family: 'Inter', sans-serif;
+            font-size: 0.9em;
+            cursor: pointer;
+        }
+
+        .lang-switch:hover {
+            background: var(--bg-primary);
+            border-color: var(--accent-primary);
+        }
+
+        /* Main Grid */
+        .main-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+            margin-bottom: 20px;
+        }
+
+        @media (max-width: 968px) {
+            .main-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        /* Cards */
+        .card {
+            background: var(--bg-secondary);
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            padding: 20px;
+            box-shadow: 0 2px 8px var(--shadow);
+        }
+
+        .card-title {
+            font-size: 1.3em;
+            font-weight: 700;
+            margin-bottom: 20px;
+            color: var(--text-primary);
+        }
+
+        /* Click Area */
+        .click-area {
+            text-align: center;
+            padding: 40px 30px;
+            background: var(--bg-card);
+            border-radius: 8px;
+            border: 1px solid var(--border);
+            margin-bottom: 20px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 20px;
+        }
+
+        .click-button {
+            width: 200px;
+            height: 200px;
+            border-radius: 50%;
+            background: linear-gradient(145deg, #4a90ff 0%, #2563eb 50%, #1d4ed8 100%);
+            border: 4px solid rgba(255, 255, 255, 0.1);
+            font-size: 2em;
+            font-weight: 900;
+            letter-spacing: 2px;
+            color: var(--text-primary);
+            cursor: pointer;
+            transition: all 0.15s ease;
+            box-shadow: 
+                0 8px 20px rgba(37, 99, 235, 0.4),
+                0 4px 8px rgba(0, 0, 0, 0.3),
+                inset 0 -4px 12px rgba(0, 0, 0, 0.3),
+                inset 0 4px 12px rgba(255, 255, 255, 0.15);
+            position: relative;
+            text-shadow: 0 2px 4px rgba(0, 0, 0, 0.5);
+        }
+
+        .click-button::before {
+            content: '';
+            position: absolute;
+            top: 8%;
+            left: 15%;
+            width: 40%;
+            height: 30%;
+            background: linear-gradient(135deg, rgba(255,255,255,0.4) 0%, rgba(255,255,255,0) 70%);
+            border-radius: 50%;
+            filter: blur(8px);
+        }
+
+        .click-button:hover {
+            transform: translateY(-3px) scale(1.02);
+            box-shadow: 
+                0 12px 28px rgba(37, 99, 235, 0.5),
+                0 6px 12px rgba(0, 0, 0, 0.4),
+                inset 0 -4px 12px rgba(0, 0, 0, 0.3),
+                inset 0 4px 12px rgba(255, 255, 255, 0.2);
+        }
+
+        .click-button:active {
+            transform: translateY(1px) scale(0.98);
+            box-shadow: 
+                0 4px 12px rgba(37, 99, 235, 0.4),
+                0 2px 4px rgba(0, 0, 0, 0.3),
+                inset 0 -2px 8px rgba(0, 0, 0, 0.4),
+                inset 0 2px 8px rgba(255, 255, 255, 0.1);
+        }
+
+        .click-stats-group {
+            display: flex;
+            gap: 30px;
+            align-items: center;
+        }
+
+        .click-stat-item {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .click-stat-label {
+            font-size: 0.75em;
+            color: var(--text-secondary);
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .click-value {
+            font-size: 1.3em;
+            color: var(--accent-success);
+            font-weight: 700;
+        }
+
+        .temp-display {
+            font-size: 1.3em;
+            font-weight: 700;
+        }
+
+        .temp-normal { color: #10b981; }
+        .temp-warm { color: #f59e0b; }
+        .temp-hot { color: #ef4444; }
+        .temp-critical { color: #dc2626; animation: pulse 1s infinite; }
+
+        @keyframes pulse {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.5; }
+        }
+
+        .power-warning {
+            background: rgba(239, 68, 68, 0.1);
+            border: 1px solid #ef4444;
+            color: #ef4444;
+            padding: 8px 16px;
+            border-radius: 6px;
+            font-size: 0.85em;
+            font-weight: 600;
+            animation: pulse 1.5s infinite;
+        }
+
+        /* Tabs */
+        .tabs {
+            display: flex;
+            gap: 8px;
+            margin-bottom: 16px;
+            border-bottom: 1px solid var(--border);
+            padding-bottom: 0;
+        }
+
+        .tab {
+            padding: 10px 20px;
+            background: transparent;
+            border: none;
+            border-bottom: 2px solid transparent;
+            color: var(--text-secondary);
+            font-size: 0.95em;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+
+        .tab:hover {
+            color: var(--text-primary);
+        }
+
+        .tab.active {
+            color: var(--accent-primary);
+            border-bottom-color: var(--accent-primary);
+        }
+
+        .tab-content {
+            display: none;
+        }
+
+        .tab-content.active {
+            display: block;
+        }
+
+        /* Lists */
+        .item-list {
+            max-height: 500px;
+            overflow-y: auto;
+            padding-right: 8px;
+        }
+
+        .item-list::-webkit-scrollbar {
+            width: 6px;
+        }
+
+        .item-list::-webkit-scrollbar-track {
+            background: var(--bg-card);
+            border-radius: 3px;
+        }
+
+        .item-list::-webkit-scrollbar-thumb {
+            background: var(--border);
+            border-radius: 3px;
+        }
+
+        .item-list::-webkit-scrollbar-thumb:hover {
+            background: var(--accent-primary);
+        }
+
+        .item {
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            border-radius: 6px;
+            padding: 14px;
+            margin-bottom: 10px;
+            transition: all 0.2s ease;
+        }
+
+        .item:hover {
+            border-color: var(--accent-primary);
+        }
+
+        .item-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 10px;
+        }
+
+        .item-name {
+            font-size: 1em;
+            font-weight: 600;
+            color: var(--text-primary);
+        }
+
+        .item-level {
+            font-size: 0.85em;
+            color: var(--text-secondary);
+            background: var(--bg-primary);
+            padding: 3px 8px;
+            border-radius: 4px;
+        }
+
+        .item-stats {
+            display: flex;
+            gap: 12px;
+            margin-bottom: 10px;
+            font-size: 0.85em;
+            color: var(--text-secondary);
+        }
+
+        .item-stat {
+            display: flex;
+            align-items: center;
+            gap: 4px;
+        }
+
+        .btn {
+            padding: 8px 16px;
+            border: none;
+            border-radius: 6px;
+            font-size: 0.9em;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            font-family: 'Inter', sans-serif;
+        }
+
+        .btn-primary {
+            background: var(--accent-primary);
+            color: white;
+        }
+
+        .btn-primary:hover:not(:disabled) {
+            background: #2563eb;
+        }
+
+        .btn-primary:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+
+        .btn-danger {
+            background: #ef4444;
+            color: white;
+        }
+
+        .btn-danger:hover:not(:disabled) {
+            background: #dc2626;
+        }
+
+        .btn-warning {
+            background: #f59e0b;
+            color: white;
+        }
+
+        .btn-warning:hover:not(:disabled) {
+            background: #d97706;
+        }
+
+        .overclock-section {
+            background: rgba(239, 68, 68, 0.05);
+            border: 1px solid rgba(239, 68, 68, 0.3);
+            border-radius: 6px;
+            padding: 12px;
+            margin-top: 10px;
+        }
+
+        .overclock-section h4 {
+            color: #ef4444;
+            font-size: 0.9em;
+            margin-bottom: 8px;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .efficiency-meter {
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            border-radius: 4px;
+            padding: 8px 12px;
+            margin-top: 8px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-size: 0.85em;
+        }
+
+        .efficiency-value {
+            font-weight: 700;
+            color: var(--accent-success);
+        }
+
+        .efficiency-low { color: #ef4444; }
+        .efficiency-medium { color: #f59e0b; }
+        .efficiency-high { color: #10b981; }
+
+        .system-stats {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 10px;
+            margin-top: 15px;
+        }
+
+        .system-stat {
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            border-radius: 6px;
+            padding: 10px;
+            text-align: center;
+        }
+
+        .system-stat-label {
+            font-size: 0.7em;
+            color: var(--text-secondary);
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            margin-bottom: 4px;
+        }
+
+        .system-stat-value {
+            font-size: 1.1em;
+            font-weight: 700;
+        }
+
+        .warning-banner {
+            background: rgba(239, 68, 68, 0.1);
+            border-left: 3px solid #ef4444;
+            padding: 10px 12px;
+            margin-top: 12px;
+            border-radius: 4px;
+            font-size: 0.85em;
+            color: #ef4444;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        /* News Ticker */
+        .news-ticker {
+            background: linear-gradient(90deg, #1a1a1a, #242424);
+            border-bottom: 2px solid var(--accent-primary);
+            padding: 8px 0;
+            overflow: hidden;
+            position: relative;
+            margin-bottom: 20px;
+        }
+
+        .news-ticker-content {
+            display: flex;
+            align-items: center;
+            gap: 50px;
+            animation: scroll 30s linear infinite;
+            white-space: nowrap;
+        }
+
+        @keyframes scroll {
+            0% { transform: translateX(100%); }
+            100% { transform: translateX(-100%); }
+        }
+
+        .news-item {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-size: 0.9em;
+        }
+
+        .news-icon {
+            color: var(--accent-warning);
+        }
+
+        .news-text {
+            color: var(--text-primary);
+        }
+
+        .news-positive { color: var(--accent-success); }
+        .news-negative { color: #ef4444; }
+
+        /* Black Market */
+        .black-market-header {
+            background: linear-gradient(135deg, #1a1a1a, #2d0a0a);
+            border: 2px solid #ef4444;
+            border-radius: 8px;
+            padding: 15px;
+            margin-bottom: 15px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .black-market-header::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(239, 68, 68, 0.1), transparent);
+            animation: shine 2s infinite;
+        }
+
+        .black-market-title {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-size: 1.2em;
+            font-weight: 700;
+            color: #ef4444;
+            margin-bottom: 8px;
+        }
+
+        .black-market-warning {
+            font-size: 0.85em;
+            color: var(--text-secondary);
+            font-style: italic;
+        }
+
+        .marketplace-item.black-market {
+            background: linear-gradient(135deg, rgba(239, 68, 68, 0.05), rgba(139, 92, 246, 0.05));
+            border: 1px solid rgba(239, 68, 68, 0.3);
+            position: relative;
+        }
+
+        .marketplace-item.black-market::before {
+            content: '⚠️ RISK';
+            position: absolute;
+            top: 5px;
+            right: 5px;
+            font-size: 0.65em;
+            background: #ef4444;
+            color: white;
+            padding: 2px 6px;
+            border-radius: 3px;
+            font-weight: 700;
+        }
+
+        .discount-badge {
+            background: #ef4444;
+            color: white;
+            font-size: 0.75em;
+            font-weight: 700;
+            padding: 3px 8px;
+            border-radius: 4px;
+            margin: 5px 0;
+        }
+
+        .quality-badge {
+            font-size: 0.7em;
+            padding: 3px 8px;
+            border-radius: 3px;
+            font-weight: 600;
+            margin-top: 5px;
+        }
+
+        .quality-authentic {
+            background: var(--accent-success);
+            color: white;
+        }
+
+        .quality-refurbished {
+            background: var(--accent-warning);
+            color: var(--bg-primary);
+        }
+
+        .quality-fake {
+            background: #ef4444;
+            color: white;
+        }
+
+        .price-change {
+            font-size: 0.75em;
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            gap: 3px;
+            margin-top: 3px;
+        }
+
+        .price-up {
+            color: #ef4444;
+        }
+
+        .price-down {
+            color: var(--accent-success);
+        }
+
+        /* Disaster Popups */
+        .disaster-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.9);
+            z-index: 9999;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            animation: fadeIn 0.3s ease;
+        }
+
+        .disaster-popup {
+            background: linear-gradient(135deg, #1a0a0a, #2d0a0a);
+            border: 3px solid #ef4444;
+            border-radius: 12px;
+            padding: 35px 40px;
+            max-width: 500px;
+            text-align: center;
+            box-shadow: 0 0 50px rgba(239, 68, 68, 0.5);
+            animation: shake 0.5s ease;
+        }
+
+        @keyframes shake {
+            0%, 100% { transform: translateX(0); }
+            10%, 30%, 50%, 70%, 90% { transform: translateX(-10px); }
+            20%, 40%, 60%, 80% { transform: translateX(10px); }
+        }
+
+        .disaster-title {
+            font-size: 1.8em;
+            font-weight: 900;
+            color: #ef4444;
+            margin-bottom: 20px;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+        }
+
+        .disaster-message {
+            font-size: 1em;
+            color: var(--text-primary);
+            margin-bottom: 20px;
+            line-height: 1.6;
+        }
+
+        .disaster-damage {
+            background: rgba(239, 68, 68, 0.2);
+            border: 1px solid #ef4444;
+            border-radius: 6px;
+            padding: 15px;
+            margin-bottom: 20px;
+            font-size: 1em;
+        }
+
+        .disaster-btn {
+            background: #ef4444;
+            color: white;
+            border: none;
+            padding: 12px 30px;
+            border-radius: 6px;
+            font-size: 1.1em;
+            font-weight: 700;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .disaster-btn:hover {
+            background: #dc2626;
+            transform: scale(1.05);
+        }
+
+        /* Explosion effect */
+        .explosion {
+            position: fixed;
+            pointer-events: none;
+            z-index: 10000;
+            font-size: 4em;
+            animation: explode 1s ease-out forwards;
+        }
+
+        @keyframes explode {
+            0% {
+                transform: scale(0) rotate(0deg);
+                opacity: 1;
+            }
+            50% {
+                transform: scale(1.5) rotate(180deg);
+                opacity: 1;
+            }
+            100% {
+                transform: scale(3) rotate(360deg);
+                opacity: 0;
+            }
+        }
+
+        /* Smoke effect */
+        .smoke {
+            position: fixed;
+            pointer-events: none;
+            z-index: 10000;
+            font-size: 3em;
+            animation: smoke 2s ease-out forwards;
+        }
+
+        @keyframes smoke {
+            0% {
+                transform: translateY(0) scale(0.5);
+                opacity: 0.8;
+            }
+            100% {
+                transform: translateY(-200px) scale(2);
+                opacity: 0;
+            }
+        }
+
+        /* BSOD Screen */
+        .bsod-screen {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: #0000aa;
+            color: white;
+            z-index: 99999;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-family: 'Courier New', monospace;
+            animation: glitch 0.3s infinite;
+        }
+
+        @keyframes glitch {
+            0%, 100% { transform: translateX(0); }
+            25% { transform: translateX(-5px); }
+            75% { transform: translateX(5px); }
+        }
+
+        .bsod-content {
+            padding: 40px;
+            max-width: 800px;
+        }
+
+        .bsod-title {
+            font-size: 2em;
+            font-weight: bold;
+            margin-bottom: 30px;
+        }
+
+        .bsod-text {
+            font-size: 1.1em;
+            line-height: 1.8;
+            margin-bottom: 15px;
+        }
+
+        .sell-button {
+            background: var(--accent-warning);
+            color: var(--bg-primary);
+            font-size: 0.8em;
+            padding: 4px 10px;
+            border-radius: 4px;
+            border: none;
+            cursor: pointer;
+            margin-top: 5px;
+            font-weight: 600;
+            transition: all 0.2s ease;
+        }
+
+        .sell-button:hover {
+            background: #d97706;
+            transform: scale(1.05);
+        }
+
+        .compatibility-warning {
+            background: rgba(239, 68, 68, 0.1);
+            border: 1px solid #ef4444;
+            color: #ef4444;
+            padding: 6px 10px;
+            border-radius: 4px;
+            font-size: 0.75em;
+            margin-top: 5px;
+            font-weight: 600;
+        }
+
+        /* 3-Dot Menu for Inventory */
+        .item-menu {
+            position: absolute;
+            top: 6px;
+            right: 6px;
+            z-index: 10;
+        }
+
+        .menu-button {
+            background: transparent;
+            border: 1px solid var(--accent-success);
+            color: var(--accent-success);
+            width: 22px;
+            height: 22px;
+            border-radius: 4px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.9em;
+            transition: all 0.2s ease;
+            opacity: 0.7;
+        }
+
+        .menu-button:hover {
+            background: rgba(16, 185, 129, 0.1);
+            opacity: 1;
+        }
+
+        .menu-dropdown {
+            position: absolute;
+            top: 28px;
+            right: 0;
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            border-radius: 6px;
+            min-width: 110px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.5);
+            display: none;
+            z-index: 100;
+        }
+
+        .menu-dropdown.active {
+            display: block;
+        }
+
+        .menu-item {
+            padding: 8px 12px;
+            color: var(--text-primary);
+            cursor: pointer;
+            transition: all 0.2s ease;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            font-size: 0.85em;
+        }
+
+        .menu-item:hover {
+            background: rgba(59, 130, 246, 0.1);
+            color: var(--accent-primary);
+        }
+
+        .menu-item.sell-item {
+            color: var(--accent-warning);
+        }
+
+        .menu-item.sell-item:hover {
+            background: rgba(245, 158, 11, 0.1);
+        }
+
+        .inventory-item {
+            position: relative;
+        }
+
+        /* Marketplace Grid */
+        .marketplace-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+            gap: 12px;
+            max-height: 600px;
+            overflow-y: auto;
+            padding-right: 8px;
+        }
+
+        .marketplace-item {
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            border-radius: 6px;
+            padding: 12px;
+            text-align: center;
+            transition: all 0.2s ease;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .marketplace-item:hover {
+            border-color: var(--accent-primary);
+        }
+
+        .marketplace-item.owned {
+            border-color: var(--accent-success);
+            background: rgba(16, 185, 129, 0.05);
+        }
+
+        .item-image {
+            width: 100%;
+            height: 120px;
+            object-fit: contain;
+            margin-bottom: 10px;
+            background: var(--bg-primary);
+            border-radius: 4px;
+        }
+
+        .item-icon {
+            font-size: 2.5em;
+            margin-bottom: 10px;
+            height: 120px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: var(--bg-primary);
+            border-radius: 4px;
+        }
+
+        .item-category-badge {
+            font-size: 0.7em;
+            color: var(--text-secondary);
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            margin-bottom: 6px;
+        }
+
+        .marketplace-item .item-name {
+            font-size: 0.85em;
+            font-weight: 600;
+            color: var(--text-primary);
+            margin-bottom: 8px;
+            min-height: 32px;
+            line-height: 1.3;
+        }
+
+        .item-price {
+            color: var(--accent-warning);
+            font-weight: 700;
+            font-size: 1em;
+            margin: 8px 0;
+        }
+
+        .item-boost {
+            color: var(--accent-success);
+            font-size: 0.8em;
+            margin-bottom: 10px;
+        }
+
+        .search-box {
+            width: 100%;
+            padding: 10px 16px;
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            border-radius: 6px;
+            color: var(--text-primary);
+            font-family: 'Inter', sans-serif;
+            font-size: 0.9em;
+            margin-bottom: 12px;
+        }
+
+        .search-box:focus {
+            outline: none;
+            border-color: var(--accent-primary);
+        }
+
+        .category-filter {
+            display: flex;
+            gap: 6px;
+            margin-bottom: 12px;
+            flex-wrap: wrap;
+        }
+
+        .category-btn {
+            padding: 6px 12px;
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            border-radius: 4px;
+            color: var(--text-secondary);
+            font-size: 0.8em;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+
+        .category-btn:hover {
+            border-color: var(--accent-primary);
+            color: var(--text-primary);
+        }
+
+        .category-btn.active {
+            background: var(--accent-primary);
+            color: white;
+            border-color: var(--accent-primary);
+        }
+
+        .sort-filter {
+            display: flex;
+            gap: 6px;
+            margin-bottom: 12px;
+            align-items: center;
+        }
+
+        .sort-filter label {
+            font-size: 0.85em;
+            color: var(--text-secondary);
+        }
+
+        .sort-select {
+            padding: 6px 12px;
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            border-radius: 4px;
+            color: var(--text-primary);
+            font-family: 'Inter', sans-serif;
+            font-size: 0.85em;
+            cursor: pointer;
+        }
+
+        /* Inventory */
+        .inventory-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
+            gap: 10px;
+        }
+
+        .inventory-item {
+            background: var(--bg-card);
+            border: 1px solid var(--accent-success);
+            border-radius: 6px;
+            padding: 10px;
+            text-align: center;
+        }
+
+        .float-number {
+            position: fixed;
+            pointer-events: none;
+            font-weight: 700;
+            font-size: 1.3em;
+            color: var(--accent-success);
+            animation: floatUp 1s ease-out forwards;
+            z-index: 1000;
+        }
+
+        @keyframes floatUp {
+            to {
+                transform: translateY(-80px);
+                opacity: 0;
+            }
+        }
+
+        .progress-bar {
+            width: 100%;
+            height: 6px;
+            background: var(--bg-card);
+            border-radius: 3px;
+            overflow: hidden;
+            margin-top: 6px;
+        }
+
+        .progress-fill {
+            height: 100%;
+            background: var(--accent-primary);
+            transition: width 0.3s ease;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <!-- News Ticker -->
+        <div class="news-ticker">
+            <div class="news-ticker-content" id="news-ticker">
+                <div class="news-item">
+                    <i class="fa fa-newspaper news-icon"></i>
+                    <span class="news-text">Loading market news...</span>
+                </div>
+            </div>
+        </div>
+
+        <header>
+            <div class="header-content">
+                <h1 id="title">PC BUILDER TYCOON</h1>
+                <div class="stats-grid">
+                    <div class="stat-card">
+                        <div class="stat-label" id="label-money">Money</div>
+                        <div class="stat-value" id="money">$0.00</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-label" id="label-income">$/Click</div>
+                        <div class="stat-value" id="income-per-click">$0.001</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-label" id="label-auto">$/Sec</div>
+                        <div class="stat-value" id="income-per-sec">$0.00</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-label" id="label-level">Level</div>
+                        <div class="stat-value" id="level">1</div>
+                    </div>
+                </div>
+                <select class="lang-switch" id="lang-switch">
+                    <option value="en">English</option>
+                    <option value="vi">Tiếng Việt</option>
+                </select>
+            </div>
+        </header>
+
+        <div class="main-grid">
+            <div class="card">
+                <div class="card-title" id="card-work">WORK STATION</div>
+                <div class="click-area">
+                    <button class="click-button" id="click-btn">
+                        <span id="btn-text">CLICK</span>
+                    </button>
+                    <div class="click-stats-group">
+                        <div class="click-stat-item">
+                            <div class="click-stat-label" id="label-per-click">Per Click</div>
+                            <div class="click-value" id="click-value-text">$0.001</div>
+                        </div>
+                        <div class="click-stat-item">
+                            <div class="click-stat-label" id="label-temp">Temperature</div>
+                            <div class="temp-display temp-normal" id="temp-display">25°C</div>
+                        </div>
+                    </div>
+                    <div id="power-warning" class="power-warning" style="display: none;">
+                        <i class="fa fa-triangle-exclamation"></i> <span id="power-warning-text">POWER OVERLOAD!</span>
+                    </div>
+                </div>
+
+                <div class="system-stats">
+                    <div class="system-stat">
+                        <div class="system-stat-label" id="label-power-usage">Power Usage</div>
+                        <div class="system-stat-value" id="power-usage">0W</div>
+                    </div>
+                    <div class="system-stat">
+                        <div class="system-stat-label" id="label-power-limit">PSU Capacity</div>
+                        <div class="system-stat-value" id="power-limit">500W</div>
+                    </div>
+                    <div class="system-stat">
+                        <div class="system-stat-label" id="label-cooling">Cooling Power</div>
+                        <div class="system-stat-value" id="cooling-power">10°C/s</div>
+                    </div>
+                    <div class="system-stat">
+                        <div class="system-stat-label" id="label-efficiency">Efficiency</div>
+                        <div class="system-stat-value efficiency-value efficiency-high" id="efficiency">100%</div>
+                    </div>
+                </div>
+
+                <div class="efficiency-meter">
+                    <span id="label-electricity-cost">Electricity Cost</span>
+                    <span style="color: var(--accent-warning); font-weight: 700;" id="electricity-cost">-$0.00/s</span>
+                </div>
+
+                <div class="overclock-section">
+                    <h4><i class="fa fa-fire"></i> <span id="label-overclock">OVERCLOCK ZONE</span></h4>
+                    <p style="font-size: 0.8em; color: var(--text-secondary); margin-bottom: 10px;" id="overclock-desc">
+                        +50% income but 2x heat generation. 5% chance of component failure!
+                    </p>
+                    <button class="btn btn-danger" id="overclock-btn" onclick="toggleOverclock()">
+                        <i class="fa fa-bolt"></i> <span id="overclock-btn-text">ENABLE OVERCLOCK</span>
+                    </button>
+                </div>
+                
+                <div class="tabs">
+                    <button class="tab active" data-tab="upgrades" id="tab-upgrades">Upgrades</button>
+                    <button class="tab" data-tab="workers" id="tab-workers">Workers</button>
+                    <button class="tab" data-tab="jobs" id="tab-jobs">Jobs</button>
+                </div>
+
+                <div class="tab-content active" id="upgrades">
+                    <div class="item-list" id="upgrades-list"></div>
+                </div>
+
+                <div class="tab-content" id="workers">
+                    <div class="item-list" id="workers-list"></div>
+                </div>
+
+                <div class="tab-content" id="jobs">
+                    <div class="item-list" id="jobs-list"></div>
+                </div>
+            </div>
+
+            <div class="card">
+                <div class="card-title" id="card-market">MARKETPLACE</div>
+                
+                <!-- Black Market Header -->
+                <div class="black-market-header" id="black-market-header" style="display: none;">
+                    <div class="black-market-title">
+                        <i class="fa fa-skull-crossbones"></i>
+                        <span id="black-market-title">BLACK MARKET</span>
+                    </div>
+                </div>
+
+                <input type="text" class="search-box" id="search-box" placeholder="Search items...">
+                <div class="sort-filter">
+                    <label id="sort-label">Sort by:</label>
+                    <select class="sort-select" id="sort-select">
+                        <option value="default">Default</option>
+                        <option value="price-low">Price: Low to High</option>
+                        <option value="price-high">Price: High to Low</option>
+                        <option value="newest">Newest Items</option>
+                        <option value="boost-high">Boost: Highest</option>
+                    </select>
+                </div>
+                <div class="category-filter" id="category-filter"></div>
+                <div class="marketplace-grid" id="marketplace-grid"></div>
+            </div>
+        </div>
+
+        <div class="card">
+            <div class="card-title" id="card-inventory">MY INVENTORY</div>
+            <div class="inventory-grid" id="inventory-grid"></div>
+        </div>
+    </div>
+
+    <script>
+        // Translations
+        const translations = {
+            en: {
+                title: 'PC BUILDER TYCOON',
+                labelMoney: 'Money',
+                labelIncome: '$/Click',
+                labelAuto: '$/Sec',
+                labelLevel: 'Level',
+                cardWork: 'WORK STATION',
+                cardMarket: 'MARKETPLACE',
+                cardInventory: 'MY INVENTORY',
+                btnText: 'CLICK',
+                clickValue: '+${value} per click',
+                labelPerClick: 'Per Click',
+                labelTemp: 'Temperature',
+                labelPowerUsage: 'Power Usage',
+                labelPowerLimit: 'PSU Capacity',
+                labelCooling: 'Cooling Power',
+                labelEfficiency: 'Efficiency',
+                labelElectricityCost: 'Electricity Cost',
+                labelOverclock: 'OVERCLOCK ZONE',
+                overclockDesc: '+50% income but 2x heat generation. 5% chance of component failure!',
+                overclockBtnEnable: 'ENABLE OVERCLOCK',
+                overclockBtnDisable: 'DISABLE OVERCLOCK',
+                powerWarning: 'POWER OVERLOAD! Reduce components or upgrade PSU!',
+                tabUpgrades: 'Upgrades',
+                tabWorkers: 'Workers',
+                tabJobs: 'Jobs',
+                searchPlaceholder: 'Search items...',
+                sortLabel: 'Sort by:',
+                buy: 'BUY',
+                hire: 'HIRE',
+                unlock: 'UNLOCK',
+                owned: 'OWNED',
+                level: 'Lv',
+                cost: 'Cost',
+                boost: 'Boost',
+                income: 'Income',
+                producing: 'Producing',
+                componentDamaged: 'COMPONENT DAMAGED!',
+                blackMarket: 'BLACK MARKET',
+                blackMarketWarning: '⚠️ Cheap goods with risks! 30% authentic, 50% refurbished, 20% fake will explode!',
+                authentic: 'AUTHENTIC',
+                refurbished: 'REFURBISHED',
+                fake: 'FAKE SCAM',
+                marketCrash: 'Market Crash',
+                marketBoom: 'Market Boom',
+                shortage: 'Component Shortage',
+                newRelease: 'New Product Release',
+                allItems: 'All',
+                blackMarketItems: 'Black Market',
+                sell: 'SELL'
+            },
+            vi: {
+                title: 'ĐẾ CHẾ MÁY TÍNH',
+                labelMoney: 'Tiền',
+                labelIncome: '$/Click',
+                labelAuto: '$/Giây',
+                labelLevel: 'Cấp',
+                cardWork: 'NƠI LÀM VIỆC',
+                cardMarket: 'CHỢ PHỤ KIỆN',
+                cardInventory: 'KHO ĐỒ',
+                btnText: 'CLICK',
+                clickValue: '+${value} mỗi click',
+                labelPerClick: 'Mỗi Click',
+                labelTemp: 'Nhiệt độ',
+                labelPowerUsage: 'Điện tiêu thụ',
+                labelPowerLimit: 'Nguồn tối đa',
+                labelCooling: 'Tản nhiệt',
+                labelEfficiency: 'Hiệu suất',
+                labelElectricityCost: 'Tiền điện',
+                labelOverclock: 'ÉP XUNG',
+                overclockDesc: '+50% thu nhập nhưng tăng 2x nhiệt độ. 5% nguy cơ hỏng linh kiện!',
+                overclockBtnEnable: 'BẬT ÉP XUNG',
+                overclockBtnDisable: 'TẮT ÉP XUNG',
+                powerWarning: 'QUÁ TẢI NGUỒN! Giảm linh kiện hoặc nâng cấp PSU!',
+                tabUpgrades: 'Nâng cấp',
+                tabWorkers: 'Nhân viên',
+                tabJobs: 'Công việc',
+                searchPlaceholder: 'Tìm kiếm...',
+                sortLabel: 'Sắp xếp:',
+                buy: 'MUA',
+                hire: 'THUÊ',
+                unlock: 'MỞ KHÓA',
+                owned: 'ĐÃ MUA',
+                level: 'Cấp',
+                cost: 'Giá',
+                boost: 'Tăng',
+                income: 'Thu nhập',
+                producing: 'Đang kiếm',
+                componentDamaged: 'LINH KIỆN BỊ HỎNG!',
+                blackMarket: 'CHỢ ĐEN',
+                blackMarketWarning: '⚠️ Hàng giá rẻ bất ngờ! 30% hàng ngon, 50% hàng dựng, 20% hàng fake sẽ nổ!',
+                authentic: 'HÀNG THẬT',
+                refurbished: 'HÀNG DỰNG',
+                fake: 'HÀNG GIẢ',
+                marketCrash: 'Thị trường sụp đổ',
+                marketBoom: 'Thị trường tăng giá',
+                shortage: 'Thiếu hụt linh kiện',
+                newRelease: 'Sản phẩm mới ra mắt',
+                allItems: 'Tất cả',
+                blackMarketItems: 'Chợ Đen',
+                sell: 'BÁN'
+            }
+        };
+
+        // Game State
+        const gameState = {
+            money: 100, // Start with $100
+            incomePerClick: 0.1, // $0.10 per click
+            incomePerSecond: 0,
+            level: 1,
+            exp: 0,
+            expToLevel: 100,
+            upgrades: {},
+            workers: {},
+            jobs: {},
+            inventory: {},
+            currentLang: 'en',
+            currentSort: 'default',
+            // Heat & Power Management
+            temperature: 25, // Current temperature in Celsius
+            baseHeatGeneration: 0.1, // Heat per second from base operations
+            coolingPower: 10, // Degrees cooled per second
+            powerUsage: 0, // Current wattage usage
+            powerLimit: 500, // PSU capacity in watts
+            electricityRate: 0.0001, // $ per watt per second (10x higher than before!)
+            efficiency: 1.0, // 0.0 to 1.0 multiplier on income
+            isOverclocked: false,
+            overclockMultiplier: 1.5,
+            overclockHeatMultiplier: 2,
+            overclockFailureChance: 0.05,
+            // Market dynamics
+            priceMultipliers: {}, // Item ID -> price multiplier
+            marketEvents: [],
+            lastMarketUpdate: Date.now(),
+            showBlackMarket: false,
+            // Disasters
+            lastDisasterCheck: Date.now(),
+            disasterCooldown: 60000, // 1 minute between disasters
+            ramUsagePercent: 0,
+            // Electricity
+            electricityMultiplier: 1.0, // News events can affect this
+            totalElectricityCost: 0,
+            // PC Build Compatibility
+            currentBuild: {
+                cpu: null,
+                motherboard: null,
+                ram: [],
+                gpu: [],
+                storage: [],
+                psu: null,
+                cooling: null,
+                case: null
+            },
+            incompatibilityPenalty: 0 // $ lost per second due to incompatibility
+        };
+
+        // Game Data
+        const upgrades = [
+            { id: 'mouse1', name: { en: 'Better Mouse', vi: 'Chuột tốt hơn' }, cost: 15, boost: 0.5, level: 0 },
+            { id: 'keyboard1', name: { en: 'Mechanical Keyboard', vi: 'Bàn phím cơ' }, cost: 50, boost: 1, level: 0 },
+            { id: 'monitor1', name: { en: 'Dual Monitor', vi: 'Màn hình đôi' }, cost: 200, boost: 3, level: 0 },
+            { id: 'chair1', name: { en: 'Gaming Chair', vi: 'Ghế gaming' }, cost: 300, boost: 5, level: 0 },
+            { id: 'desk1', name: { en: 'Standing Desk', vi: 'Bàn đứng' }, cost: 500, boost: 10, level: 0 },
+            { id: 'pc1', name: { en: 'Gaming PC', vi: 'PC Gaming' }, cost: 1200, boost: 30, level: 0 },
+            { id: 'server1', name: { en: 'Server Rack', vi: 'Tủ Server' }, cost: 5000, boost: 150, level: 0 }
+        ];
+
+        const workers = [
+            { id: 'intern', name: { en: 'Intern', vi: 'Thực tập sinh' }, cost: 50, income: 1, count: 0 },
+            { id: 'junior', name: { en: 'Junior Dev', vi: 'Dev mới' }, cost: 200, income: 5, count: 0 },
+            { id: 'senior', name: { en: 'Senior Dev', vi: 'Dev senior' }, cost: 1000, income: 25, count: 0 },
+            { id: 'manager', name: { en: 'Manager', vi: 'Quản lý' }, cost: 5000, income: 150, count: 0 },
+            { id: 'cto', name: { en: 'CTO', vi: 'Giám đốc kỹ thuật' }, cost: 25000, income: 800, count: 0 }
+        ];
+
+        const jobs = [
+            { id: 'support', name: { en: 'Tech Support', vi: 'Hỗ trợ kỹ thuật' }, cost: 100, unlock: 2, unlocked: false },
+            { id: 'repair', name: { en: 'PC Repair', vi: 'Sửa máy tính' }, cost: 500, unlock: 10, unlocked: false },
+            { id: 'build', name: { en: 'Custom Builds', vi: 'Ráp máy custom' }, cost: 2500, unlock: 50, unlocked: false },
+            { id: 'datacenter', name: { en: 'Data Center', vi: 'Trung tâm dữ liệu' }, cost: 15000, unlock: 300, unlocked: false }
+        ];
+
+        // PC Parts Categories
+        const categories = {
+            cpu: { name: { en: 'CPU', vi: 'CPU' }, icon: 'fa-microchip' },
+            gpu: { name: { en: 'GPU', vi: 'Card đồ họa' }, icon: 'fa-display' },
+            ram: { name: { en: 'RAM', vi: 'RAM' }, icon: 'fa-memory' },
+            storage: { name: { en: 'Storage', vi: 'Ổ cứng' }, icon: 'fa-hard-drive' },
+            motherboard: { name: { en: 'Motherboard', vi: 'Bo mạch chủ' }, icon: 'fa-diagram-project' },
+            psu: { name: { en: 'PSU', vi: 'Nguồn' }, icon: 'fa-plug' },
+            cases: { name: { en: 'Case', vi: 'Vỏ case' }, icon: 'fa-box' },
+            cooling: { name: { en: 'Cooling', vi: 'Tản nhiệt' }, icon: 'fa-fan' },
+            monitors: { name: { en: 'Monitors', vi: 'Màn hình' }, icon: 'fa-desktop' },
+            keyboards: { name: { en: 'Keyboards', vi: 'Bàn phím' }, icon: 'fa-keyboard' },
+            mice: { name: { en: 'Mice', vi: 'Chuột' }, icon: 'fa-computer-mouse' },
+            headsets: { name: { en: 'Headsets', vi: 'Tai nghe' }, icon: 'fa-headphones' },
+            accessories: { name: { en: 'Accessories', vi: 'Phụ kiện' }, icon: 'fa-screwdriver-wrench' },
+            chairs: { name: { en: 'Chairs', vi: 'Ghế' }, icon: 'fa-chair' },
+            desks: { name: { en: 'Desks', vi: 'Bàn' }, icon: 'fa-table' }
+        };
+
+        // Comprehensive PC Items Database (272+ items)
+        // Format: n=name, p=price, b=boost, i=icon, y=year, w=watts
+        const pcItemsDatabase = {
+            cpu: [
+                {n:'Intel Celeron G6900',p:0.05,b:0.01,i:'fa-microchip',y:2022,w:46},{n:'Intel Pentium Gold G7400',p:0.15,b:0.03,i:'fa-microchip',y:2022,w:46},{n:'Intel Core i3-12100',p:0.5,b:0.1,i:'fa-microchip',y:2022,w:60},{n:'Intel Core i3-13100',p:0.8,b:0.15,i:'fa-microchip',y:2023,w:60},{n:'Intel Core i3-14100',p:1.2,b:0.2,i:'fa-microchip',y:2024,w:60},{n:'Intel Core i5-12400',p:2.5,b:0.4,i:'fa-microchip',y:2022,w:65},{n:'Intel Core i5-12600K',p:4,b:0.6,i:'fa-microchip',y:2022,w:125},{n:'Intel Core i5-13400',p:5,b:0.75,i:'fa-microchip',y:2023,w:65},{n:'Intel Core i5-13600K',p:8,b:1.2,i:'fa-microchip',y:2023,w:125},{n:'Intel Core i5-14600K',p:12,b:1.8,i:'fa-microchip',y:2024,w:125},{n:'Intel Core i7-12700',p:15,b:2.5,i:'fa-microchip',y:2022,w:65},{n:'Intel Core i7-12700K',p:20,b:3.5,i:'fa-microchip',y:2022,w:125},{n:'Intel Core i7-13700K',p:30,b:5,i:'fa-microchip',y:2023,w:125},{n:'Intel Core i7-14700K',p:45,b:7.5,i:'fa-microchip',y:2024,w:125},{n:'Intel Core i9-12900K',p:60,b:10,i:'fa-microchip',y:2022,w:125},{n:'Intel Core i9-13900K',p:100,b:18,i:'fa-microchip',y:2023,w:125},{n:'Intel Core i9-14900K',p:150,b:28,i:'fa-microchip',y:2024,w:125},{n:'AMD Ryzen 3 4100',p:0.35,b:0.07,i:'fa-microchip',y:2022,w:65},{n:'AMD Ryzen 5 5500',p:1.5,b:0.3,i:'fa-microchip',y:2022,w:65},{n:'AMD Ryzen 5 5600',p:2.8,b:0.5,i:'fa-microchip',y:2022,w:65},{n:'AMD Ryzen 5 5600X',p:3.5,b:0.65,i:'fa-microchip',y:2020,w:65},{n:'AMD Ryzen 5 7600',p:8,b:1.3,i:'fa-microchip',y:2023,w:65},{n:'AMD Ryzen 5 7600X',p:11,b:1.8,i:'fa-microchip',y:2022,w:105},{n:'AMD Ryzen 7 5700X',p:7,b:1.1,i:'fa-microchip',y:2022,w:65},{n:'AMD Ryzen 7 5800X',p:10,b:1.6,i:'fa-microchip',y:2020,w:105},{n:'AMD Ryzen 7 5800X3D',p:18,b:3,i:'fa-microchip',y:2022,w:105},{n:'AMD Ryzen 7 7700X',p:25,b:4.5,i:'fa-microchip',y:2022,w:105},{n:'AMD Ryzen 7 7800X3D',p:55,b:9,i:'fa-microchip',y:2023,w:120},{n:'AMD Ryzen 9 5900X',p:22,b:3.8,i:'fa-microchip',y:2020,w:105},{n:'AMD Ryzen 9 5950X',p:35,b:6,i:'fa-microchip',y:2020,w:105},{n:'AMD Ryzen 9 7900X',p:65,b:11,i:'fa-microchip',y:2022,w:170},{n:'AMD Ryzen 9 7950X',p:120,b:22,i:'fa-microchip',y:2022,w:170},{n:'AMD Ryzen 9 7950X3D',p:180,b:35,i:'fa-microchip',y:2023,w:120},{n:'AMD Threadripper 7960X',p:500,b:100,i:'fa-microchip',y:2023,w:350},{n:'AMD Threadripper 7980X',p:1000,b:220,i:'fa-microchip',y:2023,w:350}
+            ],
+            gpu: [
+                {n:'NVIDIA GT 1030',p:0.3,b:0.05,i:'fa-display',y:2017,w:30},{n:'NVIDIA GTX 1650',p:2,b:0.35,i:'fa-display',y:2019,w:75},{n:'NVIDIA GTX 1660',p:3.5,b:0.6,i:'fa-display',y:2019,w:120},{n:'NVIDIA GTX 1660 Super',p:4.5,b:0.8,i:'fa-display',y:2019,w:125},{n:'NVIDIA GTX 1660 Ti',p:5,b:0.9,i:'fa-display',y:2019,w:120},{n:'NVIDIA RTX 3050',p:6,b:1.1,i:'fa-display',y:2022,w:130},{n:'NVIDIA RTX 3060',p:12,b:2,i:'fa-display',y:2021,w:170},{n:'NVIDIA RTX 3060 Ti',p:18,b:3.2,i:'fa-display',y:2020,w:200},{n:'NVIDIA RTX 3070',p:28,b:5,i:'fa-display',y:2020,w:220},{n:'NVIDIA RTX 3070 Ti',p:35,b:6.5,i:'fa-display',y:2021,w:290},{n:'NVIDIA RTX 3080',p:50,b:9,i:'fa-display',y:2020,w:320},{n:'NVIDIA RTX 3080 Ti',p:65,b:12,i:'fa-display',y:2021,w:350},{n:'NVIDIA RTX 3090',p:90,b:17,i:'fa-display',y:2020,w:350},{n:'NVIDIA RTX 3090 Ti',p:110,b:21,i:'fa-display',y:2022,w:450},{n:'NVIDIA RTX 4060',p:16,b:2.8,i:'fa-display',y:2023,w:115},{n:'NVIDIA RTX 4060 Ti',p:25,b:4.5,i:'fa-display',y:2023,w:160},{n:'NVIDIA RTX 4070',p:40,b:7.5,i:'fa-display',y:2023,w:200},{n:'NVIDIA RTX 4070 Super',p:50,b:9.5,i:'fa-display',y:2024,w:220},{n:'NVIDIA RTX 4070 Ti',p:60,b:11.5,i:'fa-display',y:2023,w:285},{n:'NVIDIA RTX 4070 Ti Super',p:75,b:14,i:'fa-display',y:2024,w:285},{n:'NVIDIA RTX 4080',p:110,b:21,i:'fa-display',y:2022,w:320},{n:'NVIDIA RTX 4080 Super',p:130,b:25,i:'fa-display',y:2024,w:320},{n:'NVIDIA RTX 4090',p:200,b:40,i:'fa-display',y:2022,w:450},{n:'AMD RX 6500 XT',p:3,b:0.5,i:'fa-display',y:2022,w:107},{n:'AMD RX 6600',p:8,b:1.4,i:'fa-display',y:2021,w:132},{n:'AMD RX 6600 XT',p:12,b:2.1,i:'fa-display',y:2021,w:160},{n:'AMD RX 6700 XT',p:20,b:3.6,i:'fa-display',y:2021,w:230},{n:'AMD RX 6750 XT',p:24,b:4.3,i:'fa-display',y:2022,w:250},{n:'AMD RX 6800',p:32,b:5.8,i:'fa-display',y:2020,w:250},{n:'AMD RX 6800 XT',p:42,b:7.8,i:'fa-display',y:2020,w:300},{n:'AMD RX 6900 XT',p:55,b:10.5,i:'fa-display',y:2020,w:300},{n:'AMD RX 7600',p:14,b:2.5,i:'fa-display',y:2023,w:165},{n:'AMD RX 7700 XT',p:28,b:5.2,i:'fa-display',y:2023,w:245},{n:'AMD RX 7800 XT',p:45,b:8.5,i:'fa-display',y:2023,w:263},{n:'AMD RX 7900 XT',p:80,b:15,i:'fa-display',y:2022,w:315},{n:'AMD RX 7900 XTX',p:120,b:23,i:'fa-display',y:2022,w:355}
+            ],
+            ram: [
+                {n:'Corsair Vengeance 8GB DDR4-2666',p:0.15,b:0.02,i:'fa-memory',y:2019,w:3},{n:'G.Skill Ripjaws V 8GB DDR4-3200',p:0.2,b:0.03,i:'fa-memory',y:2020,w:3},{n:'Kingston Fury 8GB DDR4-3200',p:0.18,b:0.03,i:'fa-memory',y:2021,w:3},{n:'Corsair Vengeance LPX 16GB DDR4-3200',p:0.4,b:0.07,i:'fa-memory',y:2020,w:5},{n:'G.Skill Ripjaws V 16GB DDR4-3600',p:0.5,b:0.09,i:'fa-memory',y:2020,w:5},{n:'Crucial Ballistix 16GB DDR4-3600',p:0.45,b:0.08,i:'fa-memory',y:2020,w:5},{n:'Corsair Vengeance RGB 16GB DDR4-3600',p:0.7,b:0.12,i:'fa-memory',y:2021,w:6},{n:'G.Skill Trident Z 16GB DDR4-3600',p:0.8,b:0.14,i:'fa-memory',y:2020,w:5},{n:'Kingston Fury Beast 32GB DDR4-3200',p:1.2,b:0.22,i:'fa-memory',y:2021,w:8},{n:'Corsair Vengeance 32GB DDR4-3600',p:1.5,b:0.28,i:'fa-memory',y:2021,w:8},{n:'G.Skill Ripjaws V 32GB DDR4-3600',p:1.4,b:0.26,i:'fa-memory',y:2021,w:8},{n:'G.Skill Trident Z RGB 32GB DDR4-3600',p:1.8,b:0.34,i:'fa-memory',y:2021,w:10},{n:'Corsair Dominator 32GB DDR4-4000',p:2.5,b:0.48,i:'fa-memory',y:2021,w:10},{n:'G.Skill Trident Z Royal 32GB DDR4-4000',p:3,b:0.58,i:'fa-memory',y:2021,w:10},{n:'Corsair Vengeance 64GB DDR4-3600',p:4,b:0.8,i:'fa-memory',y:2022,w:15},{n:'Kingston Fury Beast 16GB DDR5-5200',p:1.2,b:0.23,i:'fa-memory',y:2022,w:6},{n:'Corsair Vengeance 16GB DDR5-5600',p:1.5,b:0.29,i:'fa-memory',y:2022,w:6},{n:'G.Skill Trident Z5 16GB DDR5-6000',p:1.8,b:0.35,i:'fa-memory',y:2022,w:7},{n:'Kingston Fury Beast 32GB DDR5-5200',p:2.5,b:0.48,i:'fa-memory',y:2022,w:10},{n:'Corsair Vengeance RGB 32GB DDR5-6000',p:3.5,b:0.68,i:'fa-memory',y:2023,w:12},{n:'G.Skill Trident Z5 32GB DDR5-6400',p:4,b:0.78,i:'fa-memory',y:2023,w:12},{n:'Corsair Dominator Platinum 32GB DDR5-6600',p:5.5,b:1.1,i:'fa-memory',y:2023,w:14},{n:'G.Skill Trident Z5 Royal 32GB DDR5-7200',p:7,b:1.4,i:'fa-memory',y:2024,w:15},{n:'Corsair Vengeance 64GB DDR5-5600',p:6,b:1.2,i:'fa-memory',y:2023,w:18},{n:'G.Skill Trident Z5 64GB DDR5-6400',p:9,b:1.8,i:'fa-memory',y:2024,w:20},{n:'Corsair Dominator 96GB DDR5-6000',p:15,b:3.2,i:'fa-memory',y:2024,w:28}
+            ],
+            storage: [
+                {n:'Kingston A400 240GB SATA SSD',p:0.12,b:0.015,i:'fa-hard-drive',y:2019,w:2},{n:'Crucial BX500 480GB SATA SSD',p:0.2,b:0.025,i:'fa-hard-drive',y:2020,w:2},{n:'Samsung 870 EVO 500GB SATA SSD',p:0.35,b:0.055,i:'fa-hard-drive',y:2021,w:3},{n:'WD Blue 1TB SATA SSD',p:0.5,b:0.08,i:'fa-hard-drive',y:2020,w:3},{n:'Samsung 870 QVO 1TB SATA SSD',p:0.6,b:0.095,i:'fa-hard-drive',y:2020,w:3},{n:'Crucial MX500 1TB SATA SSD',p:0.55,b:0.088,i:'fa-hard-drive',y:2020,w:3},{n:'Samsung 870 EVO 1TB SATA SSD',p:0.7,b:0.12,i:'fa-hard-drive',y:2021,w:3},{n:'WD Blue 2TB SATA SSD',p:1.2,b:0.2,i:'fa-hard-drive',y:2021,w:4},{n:'Samsung 870 QVO 2TB SATA SSD',p:1.4,b:0.24,i:'fa-hard-drive',y:2021,w:4},{n:'Samsung 870 EVO 2TB SATA SSD',p:1.6,b:0.28,i:'fa-hard-drive',y:2021,w:4},{n:'WD Black SN770 500GB NVMe',p:0.4,b:0.065,i:'fa-hard-drive',y:2022,w:4},{n:'Samsung 980 500GB NVMe',p:0.45,b:0.072,i:'fa-hard-drive',y:2021,w:4},{n:'Crucial P3 1TB NVMe',p:0.5,b:0.08,i:'fa-hard-drive',y:2022,w:5},{n:'WD Black SN770 1TB NVMe',p:0.8,b:0.14,i:'fa-hard-drive',y:2022,w:5},{n:'Samsung 980 PRO 1TB NVMe',p:1.5,b:0.27,i:'fa-hard-drive',y:2020,w:6},{n:'Samsung 990 EVO 1TB NVMe',p:1.3,b:0.24,i:'fa-hard-drive',y:2024,w:5},{n:'Samsung 990 PRO 1TB NVMe',p:1.8,b:0.34,i:'fa-hard-drive',y:2022,w:6},{n:'WD Black SN850X 1TB NVMe',p:1.6,b:0.3,i:'fa-hard-drive',y:2022,w:6},{n:'Crucial P3 Plus 2TB NVMe',p:1.2,b:0.22,i:'fa-hard-drive',y:2022,w:7},{n:'WD Black SN770 2TB NVMe',p:1.8,b:0.34,i:'fa-hard-drive',y:2022,w:7},{n:'Samsung 980 PRO 2TB NVMe',p:3,b:0.6,i:'fa-hard-drive',y:2021,w:8},{n:'Samsung 990 PRO 2TB NVMe',p:3.5,b:0.72,i:'fa-hard-drive',y:2023,w:8},{n:'WD Black SN850X 2TB NVMe',p:3.2,b:0.65,i:'fa-hard-drive',y:2022,w:8},{n:'Samsung 990 PRO 4TB NVMe',p:7,b:1.5,i:'fa-hard-drive',y:2023,w:10},{n:'WD Black SN850X 4TB NVMe',p:6.5,b:1.4,i:'fa-hard-drive',y:2023,w:10},{n:'Seagate BarraCuda 2TB HDD',p:0.3,b:0.04,i:'fa-hard-drive',y:2020,w:5},{n:'WD Blue 4TB HDD',p:0.5,b:0.07,i:'fa-hard-drive',y:2020,w:6},{n:'Seagate BarraCuda 4TB HDD',p:0.55,b:0.08,i:'fa-hard-drive',y:2020,w:6},{n:'WD Black 6TB HDD',p:1.2,b:0.18,i:'fa-hard-drive',y:2021,w:8},{n:'Seagate IronWolf 8TB HDD',p:1.8,b:0.3,i:'fa-hard-drive',y:2021,w:9}
+            ],
+            motherboard: [
+                {n:'ASRock H610M-HDV',p:0.4,b:0.05,i:'fa-diagram-project',y:2022,w:15},{n:'ASUS Prime H610M-K',p:0.45,b:0.06,i:'fa-diagram-project',y:2022,w:15},{n:'MSI PRO B660M-A',p:0.8,b:0.12,i:'fa-diagram-project',y:2022,w:20},{n:'ASUS TUF Gaming B660M-Plus',p:1.2,b:0.18,i:'fa-diagram-project',y:2022,w:25},{n:'Gigabyte B660M DS3H',p:0.9,b:0.14,i:'fa-diagram-project',y:2022,w:20},{n:'MSI MAG B660 Tomahawk',p:1.8,b:0.3,i:'fa-diagram-project',y:2022,w:30},{n:'ASUS ROG Strix B660-A',p:2.5,b:0.45,i:'fa-diagram-project',y:2022,w:35},{n:'MSI MPG Z690 Edge',p:3.5,b:0.65,i:'fa-diagram-project',y:2021,w:40},{n:'ASUS TUF Gaming Z690-Plus',p:3,b:0.55,i:'fa-diagram-project',y:2021,w:35},{n:'Gigabyte Z690 AORUS Elite AX',p:4,b:0.8,i:'fa-diagram-project',y:2021,w:45},{n:'ASUS ROG Strix Z690-A',p:5.5,b:1.1,i:'fa-diagram-project',y:2021,w:50},{n:'MSI MEG Z690 ACE',p:8,b:1.7,i:'fa-diagram-project',y:2021,w:60},{n:'ASRock B550M Pro4',p:0.6,b:0.09,i:'fa-diagram-project',y:2020,w:18},{n:'MSI B550-A PRO',p:0.8,b:0.13,i:'fa-diagram-project',y:2020,w:20},{n:'ASUS TUF Gaming B550-Plus',p:1.1,b:0.17,i:'fa-diagram-project',y:2020,w:22},{n:'Gigabyte B550 AORUS Elite V2',p:1.5,b:0.26,i:'fa-diagram-project',y:2021,w:28},{n:'MSI MPG B550 Gaming Plus',p:1.3,b:0.22,i:'fa-diagram-project',y:2020,w:25},{n:'ASUS ROG Strix X570-E',p:4.5,b:0.9,i:'fa-diagram-project',y:2020,w:45},{n:'Gigabyte X670 AORUS Elite AX',p:6,b:1.3,i:'fa-diagram-project',y:2022,w:50},{n:'ASUS ROG Crosshair X670E Hero',p:12,b:2.8,i:'fa-diagram-project',y:2022,w:65}
+            ],
+            psu: [
+                {n:'EVGA 500W 80+ Bronze',p:0.25,b:0.03,i:'fa-plug',y:2019,w:0,cap:500,eff:0.85},{n:'Corsair CV550 550W 80+ Bronze',p:0.35,b:0.05,i:'fa-plug',y:2020,w:0,cap:550,eff:0.85},{n:'Thermaltake Smart 600W 80+ White',p:0.3,b:0.04,i:'fa-plug',y:2019,w:0,cap:600,eff:0.80},{n:'EVGA 600 BA 600W 80+ Bronze',p:0.4,b:0.06,i:'fa-plug',y:2020,w:0,cap:600,eff:0.85},{n:'Corsair CX650M 650W 80+ Bronze',p:0.55,b:0.085,i:'fa-plug',y:2020,w:0,cap:650,eff:0.85},{n:'Seasonic S12III 650W 80+ Bronze',p:0.5,b:0.078,i:'fa-plug',y:2020,w:0,cap:650,eff:0.85},{n:'Corsair RM750 750W 80+ Gold',p:1.2,b:0.2,i:'fa-plug',y:2021,w:0,cap:750,eff:0.90},{n:'EVGA SuperNOVA 750W 80+ Gold',p:1.1,b:0.19,i:'fa-plug',y:2020,w:0,cap:750,eff:0.90},{n:'Seasonic Focus GX-750 750W 80+ Gold',p:1.3,b:0.23,i:'fa-plug',y:2020,w:0,cap:750,eff:0.90},{n:'Corsair RM850 850W 80+ Gold',p:1.5,b:0.27,i:'fa-plug',y:2021,w:0,cap:850,eff:0.90},{n:'EVGA SuperNOVA 850W 80+ Platinum',p:1.8,b:0.34,i:'fa-plug',y:2020,w:0,cap:850,eff:0.92},{n:'Corsair HX1000 1000W 80+ Platinum',p:2.8,b:0.58,i:'fa-plug',y:2021,w:0,cap:1000,eff:0.92},{n:'Seasonic Prime TX-1000 1000W 80+ Titanium',p:4,b:0.85,i:'fa-plug',y:2021,w:0,cap:1000,eff:0.94},{n:'Corsair AX1200 1200W 80+ Platinum',p:4.5,b:1,i:'fa-plug',y:2021,w:0,cap:1200,eff:0.92},{n:'Seasonic Prime TX-1600 1600W 80+ Titanium',p:8,b:1.9,i:'fa-plug',y:2022,w:0,cap:1600,eff:0.94}
+            ],
+            cases: [
+                {n:'Cooler Master MasterBox Q300L',p:0.3,b:0.04,i:'fa-box',y:2019,w:0},{n:'NZXT H510',p:0.6,b:0.09,i:'fa-box',y:2019,w:0},{n:'Fractal Design Meshify C',p:0.8,b:0.13,i:'fa-box',y:2018,w:0},{n:'Corsair 4000D Airflow',p:0.9,b:0.15,i:'fa-box',y:2020,w:0},{n:'Lian Li Lancool II Mesh',p:1.2,b:0.21,i:'fa-box',y:2020,w:0},{n:'NZXT H710i',p:1.5,b:0.27,i:'fa-box',y:2019,w:0},{n:'Corsair 5000D Airflow',p:1.8,b:0.34,i:'fa-box',y:2021,w:0},{n:'Lian Li O11 Dynamic',p:2.2,b:0.44,i:'fa-box',y:2018,w:0},{n:'Phanteks Eclipse P500A',p:2,b:0.4,i:'fa-box',y:2020,w:0},{n:'Corsair Obsidian 1000D',p:6,b:1.3,i:'fa-box',y:2018,w:0},{n:'Lian Li O11 Dynamic EVO',p:2.8,b:0.58,i:'fa-box',y:2022,w:0},{n:'Thermaltake Core P8',p:3.5,b:0.75,i:'fa-box',y:2021,w:0}
+            ],
+            cooling: [
+                {n:'Cooler Master Hyper 212',p:0.2,b:0.025,i:'fa-fan',y:2019,w:2,cool:15},{n:'Arctic Freezer 34',p:0.25,b:0.035,i:'fa-fan',y:2020,w:2,cool:18},{n:'be quiet! Pure Rock 2',p:0.35,b:0.055,i:'fa-fan',y:2020,w:3,cool:22},{n:'Noctua NH-U12S',p:0.6,b:0.095,i:'fa-fan',y:2018,w:3,cool:28},{n:'Noctua NH-D15',p:1.1,b:0.19,i:'fa-fan',y:2018,w:4,cool:38},{n:'be quiet! Dark Rock Pro 4',p:0.9,b:0.16,i:'fa-fan',y:2018,w:4,cool:35},{n:'Corsair iCUE H100i RGB',p:1.3,b:0.24,i:'fa-fan',y:2020,w:8,cool:45},{n:'NZXT Kraken X53 240mm AIO',p:1.5,b:0.28,i:'fa-fan',y:2020,w:8,cool:48},{n:'Arctic Liquid Freezer II 280',p:1.2,b:0.22,i:'fa-fan',y:2020,w:9,cool:52},{n:'Corsair iCUE H150i Elite 360mm AIO',p:2,b:0.42,i:'fa-fan',y:2021,w:12,cool:65},{n:'NZXT Kraken Z73 360mm AIO',p:3,b:0.65,i:'fa-fan',y:2020,w:15,cool:70},{n:'Arctic Liquid Freezer II 360',p:1.5,b:0.3,i:'fa-fan',y:2020,w:12,cool:68},{n:'Corsair iCUE H170i Elite 420mm AIO',p:3.5,b:0.78,i:'fa-fan',y:2022,w:18,cool:85},{n:'EK-AIO Elite 360 D-RGB',p:2.5,b:0.54,i:'fa-fan',y:2021,w:14,cool:68},{n:'Lian Li Galahad 360 RGB',p:2.2,b:0.48,i:'fa-fan',y:2021,w:13,cool:65}
+            ],
+            monitors: [
+                {n:'AOC 24G2 24" 1080p 144Hz',p:1,b:0.17,i:'fa-desktop',y:2020,w:25},{n:'ASUS VP249QGR 24" 1080p 144Hz',p:1.2,b:0.21,i:'fa-desktop',y:2020,w:25},{n:'LG 24GN600 24" 1080p 144Hz',p:1.1,b:0.19,i:'fa-desktop',y:2021,w:24},{n:'Dell S2721DGF 27" 1440p 165Hz',p:2.5,b:0.52,i:'fa-desktop',y:2020,w:35},{n:'LG 27GL850 27" 1440p 144Hz',p:3,b:0.65,i:'fa-desktop',y:2019,w:40},{n:'ASUS TUF VG27AQ 27" 1440p 165Hz',p:2.8,b:0.6,i:'fa-desktop',y:2020,w:38},{n:'Samsung Odyssey G7 27" 1440p 240Hz',p:5,b:1.1,i:'fa-desktop',y:2020,w:50},{n:'LG 27GN950 27" 4K 144Hz',p:7,b:1.6,i:'fa-desktop',y:2020,w:65},{n:'ASUS ROG Swift PG279QM 27" 1440p 240Hz',p:8,b:1.8,i:'fa-desktop',y:2021,w:55},{n:'Alienware AW3423DW 34" 1440p Ultrawide',p:10,b:2.3,i:'fa-desktop',y:2022,w:80},{n:'LG 34GP83A-B 34" 1440p Ultrawide 144Hz',p:7.5,b:1.7,i:'fa-desktop',y:2021,w:70},{n:'Samsung Odyssey Neo G9 49" 1440p 240Hz',p:18,b:4.2,i:'fa-desktop',y:2021,w:120},{n:'ASUS ROG Swift PG32UQX 32" 4K 144Hz',p:30,b:7.5,i:'fa-desktop',y:2021,w:90},{n:'LG C2 42" OLED 4K 120Hz',p:12,b:2.8,i:'fa-desktop',y:2022,w:100},{n:'ASUS ROG Swift PG48UQ 48" OLED 4K 120Hz',p:16,b:3.8,i:'fa-desktop',y:2022,w:110}
+            ],
+            keyboards: [
+                {n:'Logitech K120',p:0.08,b:0.01,i:'fa-keyboard',y:2019,w:1},{n:'Redragon K552 Mechanical',p:0.25,b:0.035,i:'fa-keyboard',y:2019,w:2},{n:'Corsair K55 RGB',p:0.4,b:0.065,i:'fa-keyboard',y:2020,w:3},{n:'HyperX Alloy FPS Pro',p:0.6,b:0.11,i:'fa-keyboard',y:2019,w:2},{n:'Logitech G Pro Mechanical',p:1,b:0.19,i:'fa-keyboard',y:2020,w:3},{n:'Corsair K70 RGB MK.2',p:1.5,b:0.31,i:'fa-keyboard',y:2019,w:5},{n:'Ducky One 2 Mini',p:1.3,b:0.27,i:'fa-keyboard',y:2019,w:2},{n:'Razer Huntsman Elite',p:1.8,b:0.39,i:'fa-keyboard',y:2019,w:6},{n:'SteelSeries Apex Pro',p:2.2,b:0.49,i:'fa-keyboard',y:2020,w:5},{n:'Keychron Q1 Pro',p:2,b:0.44,i:'fa-keyboard',y:2023,w:4},{n:'GMMK Pro',p:2.5,b:0.56,i:'fa-keyboard',y:2021,w:4},{n:'Wooting 60HE',p:2.8,b:0.63,i:'fa-keyboard',y:2023,w:5}
+            ],
+            mice: [
+                {n:'Logitech G203',p:0.15,b:0.022,i:'fa-computer-mouse',y:2019,w:1},{n:'Razer DeathAdder Essential',p:0.25,b:0.04,i:'fa-computer-mouse',y:2019,w:1},{n:'SteelSeries Rival 3',p:0.3,b:0.05,i:'fa-computer-mouse',y:2020,w:1},{n:'Logitech G502 HERO',p:0.5,b:0.09,i:'fa-computer-mouse',y:2019,w:2},{n:'Razer Viper',p:0.6,b:0.11,i:'fa-computer-mouse',y:2019,w:1},{n:'Logitech G Pro Wireless',p:1.2,b:0.24,i:'fa-computer-mouse',y:2018,w:1},{n:'Razer Viper Ultimate',p:1.3,b:0.27,i:'fa-computer-mouse',y:2019,w:1},{n:'Logitech G Pro X Superlight',p:1.5,b:0.32,i:'fa-computer-mouse',y:2020,w:1},{n:'Razer DeathAdder V3 Pro',p:1.4,b:0.29,i:'fa-computer-mouse',y:2022,w:1},{n:'Finalmouse Starlight-12',p:3,b:0.7,i:'fa-computer-mouse',y:2021,w:1},{n:'Logitech G Pro X Superlight 2',p:1.6,b:0.35,i:'fa-computer-mouse',y:2023,w:1},{n:'Razer Viper V3 Pro',p:1.7,b:0.38,i:'fa-computer-mouse',y:2024,w:1}
+            ],
+            headsets: [
+                {n:'Logitech G432',p:0.3,b:0.05,i:'fa-headphones',y:2019,w:2},{n:'HyperX Cloud Stinger',p:0.35,b:0.06,i:'fa-headphones',y:2018,w:1},{n:'Corsair HS60 Pro',p:0.5,b:0.09,i:'fa-headphones',y:2020,w:2},{n:'HyperX Cloud II',p:0.8,b:0.15,i:'fa-headphones',y:2015,w:2},{n:'SteelSeries Arctis 5',p:0.9,b:0.17,i:'fa-headphones',y:2019,w:3},{n:'Razer BlackShark V2',p:1,b:0.2,i:'fa-headphones',y:2020,w:2},{n:'HyperX Cloud Alpha',p:1.2,b:0.25,i:'fa-headphones',y:2017,w:2},{n:'SteelSeries Arctis 7+',p:1.8,b:0.4,i:'fa-headphones',y:2022,w:3},{n:'SteelSeries Arctis Nova Pro',p:3,b:0.7,i:'fa-headphones',y:2022,w:4},{n:'Audeze Maxwell',p:3.5,b:0.85,i:'fa-headphones',y:2023,w:4}
+            ],
+            accessories: [
+                {n:'USB 2.0 Hub 4-Port',p:0.05,b:0.005,i:'fa-usb',y:2020,w:2},{n:'USB 3.0 Hub 4-Port',p:0.1,b:0.012,i:'fa-usb',y:2020,w:3},{n:'Basic Mouse Pad',p:0.02,b:0.002,i:'fa-table-cells',y:2019,w:0},{n:'Extended Mouse Pad XXL',p:0.15,b:0.02,i:'fa-table-cells-large',y:2020,w:0},{n:'SteelSeries QcK Gaming Mouse Pad',p:0.12,b:0.015,i:'fa-table-cells',y:2019,w:0},{n:'Cable Management Kit',p:0.08,b:0.01,i:'fa-screwdriver-wrench',y:2020,w:0},{n:'LED Light Strip 3m',p:0.18,b:0.025,i:'fa-lightbulb',y:2020,w:10},{n:'RGB Light Strip 5m',p:0.4,b:0.065,i:'fa-lightbulb',y:2021,w:15},{n:'Philips Hue Light Strip',p:1.2,b:0.24,i:'fa-lightbulb',y:2021,w:20},{n:'Monitor Arm Single',p:0.6,b:0.1,i:'fa-arrows-up-down',y:2020,w:0},{n:'Monitor Arm Dual',p:1.5,b:0.3,i:'fa-arrows-up-down',y:2020,w:0},{n:'Desk Mat Large',p:0.25,b:0.04,i:'fa-table-cells',y:2020,w:0},{n:'Webcam 1080p Logitech C920',p:0.6,b:0.11,i:'fa-video',y:2019,w:3},{n:'Webcam 4K Logitech Brio',p:2,b:0.45,i:'fa-video',y:2020,w:5},{n:'Elgato Stream Deck',p:1.5,b:0.33,i:'fa-table-cells',y:2020,w:5},{n:'Blue Yeti Microphone',p:1.3,b:0.28,i:'fa-microphone',y:2019,w:5},{n:'Shure SM7B Microphone',p:4,b:0.95,i:'fa-microphone',y:2018,w:2},{n:'Elgato Wave:3 Microphone',p:1.6,b:0.36,i:'fa-microphone',y:2020,w:5},{n:'APC UPS 600VA',p:1.8,b:0.4,i:'fa-battery-three-quarters',y:2020,w:0},{n:'CyberPower UPS 1500VA',p:4.5,b:1.1,i:'fa-battery-full',y:2021,w:0}
+            ],
+            chairs: [
+                {n:'Basic Office Chair',p:0.5,b:0.08,i:'fa-chair',y:2019,w:0},{n:'Homall Gaming Chair',p:1.2,b:0.22,i:'fa-chair',y:2020,w:0},{n:'RESPAWN Gaming Chair',p:2,b:0.42,i:'fa-chair',y:2020,w:0},{n:'Secretlab Titan Evo 2022',p:5,b:1.2,i:'fa-chair',y:2022,w:0},{n:'Herman Miller Aeron',p:15,b:3.8,i:'fa-chair',y:2018,w:0},{n:'Steelcase Leap V2',p:12,b:3,i:'fa-chair',y:2019,w:0},{n:'Herman Miller Embody',p:18,b:4.5,i:'fa-chair',y:2018,w:0},{n:'Secretlab Titan Evo Plus',p:7,b:1.7,i:'fa-chair',y:2024,w:0}
+            ],
+            desks: [
+                {n:'Ikea LINNMON Desk',p:0.4,b:0.06,i:'fa-table',y:2019,w:0},{n:'FlexiSpot Standing Desk',p:3,b:0.65,i:'fa-table',y:2020,w:0},{n:'Uplift V2 Standing Desk',p:6,b:1.4,i:'fa-table',y:2021,w:0},{n:'Secretlab Magnus Pro',p:8,b:1.9,i:'fa-table',y:2022,w:0},{n:'Herman Miller Motia Desk',p:12,b:2.9,i:'fa-table',y:2021,w:0},{n:'Fully Jarvis Bamboo Desk',p:7,b:1.6,i:'fa-table',y:2020,w:0}
+            ]
+        };
+
+        // Generate marketplace items from database
+        const marketplaceItems = [];
+        let itemId = 0;
+        Object.keys(pcItemsDatabase).forEach(category => {
+            pcItemsDatabase[category].forEach(item => {
+                // Detect socket/platform from name
+                let socket = 'universal';
+                let ramType = 'universal';
+                
+                if (category === 'cpu') {
+                    if (item.n.includes('Intel')) {
+                        if (item.n.includes('12') || item.n.includes('13') || item.n.includes('14')) {
+                            socket = 'LGA1700';
+                        } else {
+                            socket = 'LGA1200';
+                        }
+                    } else if (item.n.includes('AMD')) {
+                        if (item.n.includes('7')) {
+                            socket = 'AM5';
+                        } else if (item.n.includes('5')) {
+                            socket = 'AM4';
+                        } else if (item.n.includes('Threadripper')) {
+                            socket = 'sTRX4';
+                        }
+                    }
+                } else if (category === 'motherboard') {
+                    if (item.n.includes('H610') || item.n.includes('B660') || item.n.includes('Z690')) {
+                        socket = 'LGA1700';
+                        ramType = 'DDR4';
+                    } else if (item.n.includes('B550') || item.n.includes('X570')) {
+                        socket = 'AM4';
+                        ramType = 'DDR4';
+                    } else if (item.n.includes('X670') || item.n.includes('B650')) {
+                        socket = 'AM5';
+                        ramType = 'DDR5';
+                    }
+                } else if (category === 'ram') {
+                    ramType = item.n.includes('DDR5') ? 'DDR5' : 'DDR4';
+                }
+                
+                marketplaceItems.push({
+                    id: `item_${itemId++}`,
+                    category,
+                    name: item.n,
+                    price: item.p,
+                    basePrice: item.p,
+                    boost: item.b,
+                    baseBoost: item.b,
+                    icon: item.i,
+                    year: item.y,
+                    watts: item.w || 0,
+                    cooling: item.cool || 0,
+                    psuCapacity: item.cap || 0,
+                    psuEfficiency: item.eff || 1.0,
+                    socket: socket,
+                    ramType: ramType,
+                    owned: false,
+                    isBlackMarket: false,
+                    quality: null
+                });
+            });
+        });
+
+        // PC Build Compatibility System
+        function checkCompatibility() {
+            const build = gameState.currentBuild;
+            let issues = [];
+            let penalty = 0;
+            
+            // Update current build from owned items
+            build.cpu = allMarketItems.find(i => i.owned && i.category === 'cpu') || null;
+            build.motherboard = allMarketItems.find(i => i.owned && i.category === 'motherboard') || null;
+            build.ram = allMarketItems.filter(i => i.owned && i.category === 'ram');
+            build.psu = allMarketItems.find(i => i.owned && i.category === 'psu' && i.psuCapacity > 0) || null;
+            
+            // Check CPU-Motherboard socket compatibility
+            if (build.cpu && build.motherboard) {
+                if (build.cpu.socket !== 'universal' && build.motherboard.socket !== 'universal') {
+                    if (build.cpu.socket !== build.motherboard.socket) {
+                        issues.push({
+                            type: 'critical',
+                            message: `CPU socket ${build.cpu.socket} incompatible with motherboard socket ${build.motherboard.socket}!`,
+                            penalty: 10
+                        });
+                        penalty += 10;
+                    }
+                }
+            }
+            
+            // Check RAM-Motherboard compatibility
+            if (build.motherboard && build.ram.length > 0) {
+                build.ram.forEach(ram => {
+                    if (ram.ramType !== 'universal' && build.motherboard.ramType !== 'universal') {
+                        if (ram.ramType !== build.motherboard.ramType) {
+                            issues.push({
+                                type: 'critical',
+                                message: `${ram.name} (${ram.ramType}) incompatible with motherboard (requires ${build.motherboard.ramType})!`,
+                                penalty: 5
+                            });
+                            penalty += 5;
+                        }
+                    }
+                });
+            }
+            
+            // Check if have CPU without motherboard
+            if (build.cpu && !build.motherboard) {
+                issues.push({
+                    type: 'warning',
+                    message: `CPU without motherboard - wasting potential!`,
+                    penalty: 2
+                });
+                penalty += 2;
+            }
+            
+            // Check if have motherboard without CPU
+            if (build.motherboard && !build.cpu) {
+                issues.push({
+                    type: 'warning',
+                    message: `Motherboard without CPU - useless!`,
+                    penalty: 1
+                });
+                penalty += 1;
+            }
+            
+            gameState.incompatibilityPenalty = penalty;
+            return issues;
+        }
+
+        // Generate Black Market items (discounted versions of expensive items)
+        const blackMarketItems = [];
+        marketplaceItems.forEach(item => {
+            // Only add expensive items (>$5) to black market
+            if (item.basePrice > 5 && (item.category === 'cpu' || item.category === 'gpu' || item.category === 'motherboard')) {
+                const bmItem = {
+                    ...item,
+                    id: `bm_${item.id}`,
+                    price: item.basePrice * (Math.random() * 0.3 + 0.3), // 30-60% discount
+                    isBlackMarket: true,
+                    owned: false,
+                    quality: null
+                };
+                blackMarketItems.push(bmItem);
+            }
+        });
+
+        // Combine all items
+        const allMarketItems = [...marketplaceItems, ...blackMarketItems];
+
+        // Dynamic pricing system
+        function updateMarketPrices() {
+            const now = Date.now();
+            if (now - gameState.lastMarketUpdate < 30000) return; // Update every 30s
+            
+            gameState.lastMarketUpdate = now;
+            
+            // Pick a real news event
+            const event = realNewsEvents[Math.floor(Math.random() * realNewsEvents.length)];
+            
+            // Apply electricity multiplier
+            if (event.elec !== 1.0) {
+                gameState.electricityMultiplier = event.elec;
+                gameState.electricityRate = 0.0001 * event.elec; // Updated to match new base rate
+            }
+            
+            // Apply price changes
+            if (event.category && event.category !== 'all') {
+                marketplaceItems.forEach(item => {
+                    if (item.category === event.category && !item.isBlackMarket) {
+                        const multiplier = 1 + event.change;
+                        item.price = item.basePrice * multiplier;
+                        gameState.priceMultipliers[item.id] = multiplier;
+                    }
+                });
+            } else if (event.category === 'all') {
+                // Affect all categories
+                marketplaceItems.forEach(item => {
+                    if (!item.isBlackMarket) {
+                        const multiplier = 1 + event.change;
+                        item.price = item.basePrice * multiplier;
+                        gameState.priceMultipliers[item.id] = multiplier;
+                    }
+                });
+            }
+            
+            // Update news ticker
+            updateNewsTicker(event);
+            
+            // Gradually normalize prices
+            Object.keys(gameState.priceMultipliers).forEach(id => {
+                const item = allMarketItems.find(i => i.id === id);
+                if (item && !item.isBlackMarket) {
+                    gameState.priceMultipliers[id] *= 0.95; // Move 5% towards 1.0
+                    item.price = item.basePrice * gameState.priceMultipliers[id];
+                    if (Math.abs(gameState.priceMultipliers[id] - 1) < 0.01) {
+                        delete gameState.priceMultipliers[id];
+                        item.price = item.basePrice;
+                    }
+                }
+            });
+            
+            // Gradually normalize electricity cost
+            if (gameState.electricityMultiplier !== 1.0) {
+                gameState.electricityMultiplier *= 0.98; // Slowly return to normal
+                if (Math.abs(gameState.electricityMultiplier - 1.0) < 0.05) {
+                    gameState.electricityMultiplier = 1.0;
+                    gameState.electricityRate = 0.0001; // Updated base rate
+                }
+            }
+        }
+
+        // News ticker system with real events
+        const realNewsEvents = [
+            // GPU Market Events
+            { icon: 'fa-chart-line', text: 'NVIDIA announces RTX 50-series - RTX 40-series prices dropping', category: 'gpu', change: -0.15, elec: 1.0 },
+            { icon: 'fa-fire', text: 'Cryptocurrency mining boom - GPU demand surges, prices up 40%', category: 'gpu', change: 0.4, elec: 1.0 },
+            { icon: 'fa-industry', text: 'TSMC fab fire disrupts GPU production - Prices spike', category: 'gpu', change: 0.3, elec: 1.0 },
+            
+            // CPU Market Events
+            { icon: 'fa-microchip', text: 'Intel 15th gen launch - Previous generation 20% off', category: 'cpu', change: -0.2, elec: 1.0 },
+            { icon: 'fa-chart-line', text: 'AMD Ryzen 8000 series announced - AM4 CPUs clearance sale', category: 'cpu', change: -0.25, elec: 1.0 },
+            { icon: 'fa-exclamation-triangle', text: 'Global chip shortage intensifies - CPU prices surge', category: 'cpu', change: 0.35, elec: 1.0 },
+            
+            // RAM Events
+            { icon: 'fa-memory', text: 'DDR5 production ramps up - DDR4 prices falling rapidly', category: 'ram', change: -0.2, elec: 1.0 },
+            { icon: 'fa-bolt', text: 'Samsung factory accident - RAM shortage expected', category: 'ram', change: 0.3, elec: 1.0 },
+            { icon: 'fa-industry', text: 'Major RAM manufacturer bankruptcy - Prices volatile', category: 'ram', change: 0.25, elec: 1.0 },
+            
+            // Electricity Events
+            { icon: 'fa-bolt', text: 'Energy crisis: Electricity prices increase 50%!', category: null, change: 0, elec: 1.5 },
+            { icon: 'fa-leaf', text: 'Green energy breakthrough - Electricity costs down 30%', category: null, change: 0, elec: 0.7 },
+            { icon: 'fa-fire', text: 'Heatwave forces power rationing - Electricity 2x cost!', category: null, change: 0, elec: 2.0 },
+            { icon: 'fa-sun', text: 'Solar power expansion - Electricity bills reduced', category: null, change: 0, elec: 0.8 },
+            
+            // Storage Events  
+            { icon: 'fa-hard-drive', text: 'SSD price war - Major brands slashing prices', category: 'storage', change: -0.3, elec: 1.0 },
+            { icon: 'fa-warehouse', text: 'NAND shortage - SSD prices climbing', category: 'storage', change: 0.25, elec: 1.0 },
+            
+            // Motherboard Events
+            { icon: 'fa-diagram-project', text: 'New chipset release - Old motherboards 15% off', category: 'motherboard', change: -0.15, elec: 1.0 },
+            { icon: 'fa-exclamation', text: 'PCIe 5.0 adoption surge - AM4/LGA1200 boards discounted', category: 'motherboard', change: -0.2, elec: 1.0 },
+            
+            // General Market
+            { icon: 'fa-ship', text: 'Supply chain delays - All component prices up 10%', category: 'all', change: 0.1, elec: 1.0 },
+            { icon: 'fa-truck', text: 'Shipping costs normalize - Component prices stabilizing', category: null, change: 0, elec: 1.0 },
+            { icon: 'fa-dollar-sign', text: 'Black Friday sales - Massive discounts across all categories', category: 'all', change: -0.35, elec: 1.0 }
+        ];
+
+        function updateNewsTicker(marketEvent) {
+            const ticker = document.getElementById('news-ticker');
+            const t = translations[gameState.currentLang];
+            
+            let newsHTML = '';
+            
+            // Add market event
+            if (marketEvent && marketEvent.text) {
+                const typeClass = marketEvent.change > 0 ? 'news-negative' : marketEvent.change < 0 ? 'news-positive' : '';
+                newsHTML += `
+                    <div class="news-item">
+                        <i class="fa ${marketEvent.icon || 'fa-newspaper'} news-icon"></i>
+                        <span class="news-text ${typeClass}">${marketEvent.text}</span>
+                    </div>
+                `;
+            }
+            
+            // Add some random real news
+            const randomNews = realNewsEvents.sort(() => Math.random() - 0.5).slice(0, 3);
+            randomNews.forEach(news => {
+                const typeClass = news.change > 0 ? 'news-negative' : news.change < 0 ? 'news-positive' : '';
+                newsHTML += `
+                    <div class="news-item">
+                        <i class="fa ${news.icon} news-icon"></i>
+                        <span class="news-text ${typeClass}">${news.text}</span>
+                    </div>
+                `;
+            });
+            
+            ticker.innerHTML = newsHTML + newsHTML; // Duplicate for seamless loop
+        }
+
+        // Calculate total power and heat
+        function calculateSystemStats() {
+            let totalWatts = 50; // Base system consumption
+            let totalCooling = 10; // Base cooling
+            let maxPSU = 500; // Base PSU
+            let psuEfficiency = 0.85; // Default Bronze efficiency
+
+            marketplaceItems.forEach(item => {
+                if (item.owned) {
+                    totalWatts += item.watts;
+                    if (item.cooling > 0) {
+                        totalCooling += item.cooling;
+                    }
+                    if (item.psuCapacity > 0) {
+                        maxPSU = item.psuCapacity;
+                        psuEfficiency = item.psuEfficiency;
+                    }
+                }
+            });
+
+            // Calculate electricity cost (inefficiency causes waste)
+            const powerDraw = totalWatts / psuEfficiency;
+            const electricityCost = powerDraw * gameState.electricityRate;
+
+            // Check power overload
+            const isPowerOverload = totalWatts > maxPSU;
+
+            // Calculate heat generation
+            const heatPerSecond = (totalWatts * 0.05) + gameState.baseHeatGeneration;
+            const multiplier = gameState.isOverclocked ? gameState.overclockHeatMultiplier : 1;
+            const netHeat = (heatPerSecond * multiplier) - totalCooling;
+
+            return { totalWatts, maxPSU, totalCooling, isPowerOverload, electricityCost, netHeat, psuEfficiency };
+        }
+
+        // Update temperature and efficiency
+        function updateHeatSystem(deltaTime = 0.1) {
+            const stats = calculateSystemStats();
+
+            // Calculate heat generation - base from power consumption
+            let heatPerSecond = (stats.totalWatts * 0.05) + gameState.baseHeatGeneration;
+            
+            // Overclock multiplies heat generation
+            if (gameState.isOverclocked) {
+                heatPerSecond *= gameState.overclockHeatMultiplier;
+            }
+            
+            const netHeat = heatPerSecond - stats.totalCooling;
+
+            // Update temperature
+            gameState.temperature += netHeat * deltaTime;
+            gameState.temperature = Math.max(25, Math.min(100, gameState.temperature));
+
+            // Calculate efficiency based on temperature
+            if (gameState.temperature < 50) {
+                gameState.efficiency = 1.0;
+            } else if (gameState.temperature < 70) {
+                gameState.efficiency = 1.0 - ((gameState.temperature - 50) / 100);
+            } else if (gameState.temperature < 85) {
+                gameState.efficiency = 0.8 - ((gameState.temperature - 70) / 50);
+            } else {
+                gameState.efficiency = Math.max(0.2, 0.5 - ((gameState.temperature - 85) / 30));
+            }
+
+            // Deduct electricity cost with multiplier from events
+            const electricityCost = stats.electricityCost * gameState.electricityMultiplier;
+            gameState.money -= electricityCost * deltaTime;
+            gameState.totalElectricityCost += electricityCost * deltaTime;
+
+            // Power overload - stop all income
+            if (stats.isPowerOverload) {
+                gameState.efficiency = 0;
+            }
+
+            return stats;
+        }
+
+        // Overclock toggle
+        function toggleOverclock() {
+            const t = translations[gameState.currentLang];
+            
+            if (gameState.isOverclocked) {
+                gameState.isOverclocked = false;
+                document.getElementById('overclock-btn-text').textContent = t.overclockBtnEnable;
+                document.getElementById('overclock-btn').classList.remove('btn-warning');
+                document.getElementById('overclock-btn').classList.add('btn-danger');
+            } else {
+                gameState.isOverclocked = true;
+                document.getElementById('overclock-btn-text').textContent = t.overclockBtnDisable;
+                document.getElementById('overclock-btn').classList.remove('btn-danger');
+                document.getElementById('overclock-btn').classList.add('btn-warning');
+                
+                // Check for component failure
+                if (Math.random() < gameState.overclockFailureChance) {
+                    const ownedItems = marketplaceItems.filter(i => i.owned && (i.category === 'cpu' || i.category === 'gpu'));
+                    if (ownedItems.length > 0) {
+                        const damaged = ownedItems[Math.floor(Math.random() * ownedItems.length)];
+                        damaged.owned = false;
+                        delete gameState.inventory[damaged.id];
+                        gameState.incomePerSecond -= damaged.boost;
+                        alert(t.componentDamaged + ' ' + damaged.name);
+                        renderMarketplace();
+                        renderInventory();
+                    }
+                }
+            }
+        }
+
+        // Update system stats UI
+        function updateSystemStatsUI() {
+            const stats = calculateSystemStats();
+            const t = translations[gameState.currentLang];
+
+            document.getElementById('power-usage').textContent = Math.round(stats.totalWatts) + 'W';
+            document.getElementById('power-limit').textContent = stats.maxPSU + 'W';
+            document.getElementById('cooling-power').textContent = Math.round(stats.totalCooling) + '°C/s';
+            document.getElementById('electricity-cost').textContent = '-' + formatMoney(stats.electricityCost) + '/s';
+
+            // Temperature display
+            const tempEl = document.getElementById('temp-display');
+            tempEl.textContent = Math.round(gameState.temperature) + '°C';
+            tempEl.className = 'temp-display';
+            if (gameState.temperature < 50) tempEl.classList.add('temp-normal');
+            else if (gameState.temperature < 70) tempEl.classList.add('temp-warm');
+            else if (gameState.temperature < 85) tempEl.classList.add('temp-hot');
+            else tempEl.classList.add('temp-critical');
+
+            // Efficiency display
+            const effEl = document.getElementById('efficiency');
+            const effPercent = Math.round(gameState.efficiency * 100);
+            effEl.textContent = effPercent + '%';
+            effEl.className = 'system-stat-value efficiency-value';
+            if (effPercent >= 90) effEl.classList.add('efficiency-high');
+            else if (effPercent >= 60) effEl.classList.add('efficiency-medium');
+            else effEl.classList.add('efficiency-low');
+
+            // Power warning
+            const powerWarning = document.getElementById('power-warning');
+            if (stats.isPowerOverload) {
+                powerWarning.style.display = 'flex';
+                powerWarning.querySelector('span').textContent = t.powerWarning;
+            } else {
+                powerWarning.style.display = 'none';
+            }
+        }
+
+        // DISASTER SYSTEM
+        function checkDisasters() {
+            const now = Date.now();
+            if (now - gameState.lastDisasterCheck < gameState.disasterCooldown) return;
+            
+            const t = translations[gameState.currentLang];
+            
+            // Calculate RAM usage (simulate based on owned items)
+            const ownedCount = allMarketItems.filter(i => i.owned).length;
+            gameState.ramUsagePercent = Math.min(95, (ownedCount / 50) * 100);
+            
+            // BSOD - Blue Screen of Death
+            if (Math.random() < 0.001 || gameState.ramUsagePercent > 90) {
+                if (gameState.ramUsagePercent > 90 && Math.random() < 0.1) {
+                    triggerBSOD();
+                    gameState.lastDisasterCheck = now;
+                    return;
+                }
+            }
+            
+            // Component Overheat Explosion
+            if (gameState.temperature > 85 && gameState.isOverclocked) {
+                if (Math.random() < 0.05) { // 5% chance when overclocked and hot
+                    triggerComponentExplosion();
+                    gameState.lastDisasterCheck = now;
+                    return;
+                }
+            }
+        }
+
+        // BSOD Event
+        function triggerBSOD() {
+            const bsod = document.createElement('div');
+            bsod.className = 'bsod-screen';
+            bsod.innerHTML = `
+                <div class="bsod-content">
+                    <div class="bsod-title">A problem has been detected and Windows has been shut down to prevent damage to your computer.</div>
+                    <div class="bsod-text">CRITICAL_PROCESS_DIED</div>
+                    <div class="bsod-text">If this is the first time you've seen this Stop error screen, restart your computer. If this screen appears again, follow these steps:</div>
+                    <div class="bsod-text">Check to make sure any new hardware or software is properly installed.</div>
+                    <div class="bsod-text">Technical information:</div>
+                    <div class="bsod-text">*** STOP: 0x000000EF (0x${Math.floor(Math.random()*9999).toString(16).toUpperCase()})</div>
+                    <div class="bsod-text" style="margin-top: 30px;">RAM USAGE: ${gameState.ramUsagePercent.toFixed(1)}%</div>
+                    <div class="bsod-text">INCOME LOST: -50% for 30 seconds</div>
+                </div>
+            `;
+            document.body.appendChild(bsod);
+            
+            // Reduce efficiency by 50% for 30 seconds
+            const originalEfficiency = gameState.efficiency;
+            gameState.efficiency *= 0.5;
+            
+            setTimeout(() => {
+                bsod.remove();
+            }, 5000);
+            
+            setTimeout(() => {
+                gameState.efficiency = Math.min(1.0, originalEfficiency);
+            }, 30000);
+        }
+
+        // Component Explosion
+        function triggerComponentExplosion() {
+            const t = translations[gameState.currentLang];
+            const cpusAndGpus = allMarketItems.filter(i => i.owned && (i.category === 'cpu' || i.category === 'gpu'));
+            
+            if (cpusAndGpus.length === 0) return;
+            
+            const victim = cpusAndGpus[Math.floor(Math.random() * cpusAndGpus.length)];
+            
+            // Visual explosion effect
+            createExplosion();
+            
+            // Remove component
+            victim.owned = false;
+            delete gameState.inventory[victim.id];
+            gameState.incomePerSecond -= victim.boost;
+            
+            // Disable overclock
+            if (gameState.isOverclocked) {
+                toggleOverclock();
+            }
+            
+            // Show disaster popup
+            showDisasterPopup(
+                '💥',
+                'COMPONENT EXPLOSION',
+                `${victim.name} has EXPLODED due to extreme overheating!<br><br>Temperature: ${Math.round(gameState.temperature)}°C<br>Overclock + insufficient cooling = catastrophic failure`,
+                `Lost: ${victim.name} (-${formatMoney(victim.boost)}/s)`
+            );
+            
+            renderMarketplace();
+            renderInventory();
+        }
+
+        // Create explosion visual effect
+        function createExplosion() {
+            for (let i = 0; i < 5; i++) {
+                setTimeout(() => {
+                    const explosion = document.createElement('div');
+                    explosion.className = 'explosion';
+                    explosion.textContent = '💥';
+                    explosion.style.left = (window.innerWidth / 2 + (Math.random() - 0.5) * 200) + 'px';
+                    explosion.style.top = (window.innerHeight / 2 + (Math.random() - 0.5) * 200) + 'px';
+                    document.body.appendChild(explosion);
+                    setTimeout(() => explosion.remove(), 1000);
+                    
+                    const smoke = document.createElement('div');
+                    smoke.className = 'smoke';
+                    smoke.textContent = '💨';
+                    smoke.style.left = explosion.style.left;
+                    smoke.style.top = explosion.style.top;
+                    document.body.appendChild(smoke);
+                    setTimeout(() => smoke.remove(), 2000);
+                }, i * 100);
+            }
+        }
+
+        // Generic disaster popup
+        function showDisasterPopup(icon, title, message, damage) {
+            const overlay = document.createElement('div');
+            overlay.className = 'disaster-overlay';
+            overlay.innerHTML = `
+                <div class="disaster-popup">
+                    <div class="disaster-title">${title}</div>
+                    <div class="disaster-message">${message}</div>
+                    <div class="disaster-damage">${damage}</div>
+                    <button class="disaster-btn" onclick="this.closest('.disaster-overlay').remove()">CONTINUE</button>
+                </div>
+            `;
+            document.body.appendChild(overlay);
+        }
+
+        // Load saved game
+        function loadGame() {
+            const saved = localStorage.getItem('pcTycoonSave');
+            if (saved) {
+                const data = JSON.parse(saved);
+                Object.assign(gameState, data);
+                marketplaceItems.forEach(item => {
+                    if (gameState.inventory[item.id]) {
+                        item.owned = true;
+                    }
+                });
+            }
+        }
+
+        // Save game
+        function saveGame() {
+            localStorage.setItem('pcTycoonSave', JSON.stringify(gameState));
+        }
+
+        // Format money
+        function formatMoney(amount) {
+            if (amount >= 1000000) return '$' + (amount / 1000000).toFixed(2) + 'M';
+            if (amount >= 1000) return '$' + (amount / 1000).toFixed(2) + 'K';
+            if (amount >= 1) return '$' + amount.toFixed(2);
+            return '$' + amount.toFixed(3);
+        }
+
+        // Click handler
+        document.getElementById('click-btn').addEventListener('click', function(e) {
+            const ocMultiplier = gameState.isOverclocked ? gameState.overclockMultiplier : 1;
+            const income = gameState.incomePerClick * ocMultiplier * gameState.efficiency;
+            gameState.money += income;
+            gameState.exp += 1;
+            
+            // Floating number
+            const float = document.createElement('div');
+            float.className = 'float-number';
+            float.textContent = '+' + formatMoney(income);
+            float.style.left = e.clientX + 'px';
+            float.style.top = e.clientY + 'px';
+            document.body.appendChild(float);
+            setTimeout(() => float.remove(), 1000);
+
+            checkLevelUp();
+            updateUI();
+        });
+
+        // Level up
+        function checkLevelUp() {
+            while (gameState.exp >= gameState.expToLevel) {
+                gameState.level++;
+                gameState.exp -= gameState.expToLevel;
+                gameState.expToLevel = Math.floor(gameState.expToLevel * 1.5);
+            }
+        }
+
+        // Update UI
+        function updateUI() {
+            const t = translations[gameState.currentLang];
+            const ocMultiplier = gameState.isOverclocked ? gameState.overclockMultiplier : 1;
+            document.getElementById('money').textContent = formatMoney(gameState.money);
+            document.getElementById('income-per-click').textContent = formatMoney(gameState.incomePerClick * ocMultiplier);
+            document.getElementById('income-per-sec').textContent = formatMoney(gameState.incomePerSecond * ocMultiplier * gameState.efficiency);
+            document.getElementById('level').textContent = gameState.level;
+            document.getElementById('click-value-text').textContent = formatMoney(gameState.incomePerClick * ocMultiplier * gameState.efficiency);
+            updateSystemStatsUI();
+        }
+
+        // Change language
+        document.getElementById('lang-switch').addEventListener('change', function(e) {
+            gameState.currentLang = e.target.value;
+            updateLanguage();
+            renderAll();
+        });
+
+        function updateLanguage() {
+            const t = translations[gameState.currentLang];
+            document.getElementById('title').textContent = t.title;
+            document.getElementById('label-money').textContent = t.labelMoney;
+            document.getElementById('label-income').textContent = t.labelIncome;
+            document.getElementById('label-auto').textContent = t.labelAuto;
+            document.getElementById('label-level').textContent = t.labelLevel;
+            document.getElementById('card-work').textContent = t.cardWork;
+            document.getElementById('card-market').textContent = t.cardMarket;
+            document.getElementById('card-inventory').textContent = t.cardInventory;
+            document.getElementById('btn-text').textContent = t.btnText;
+            document.getElementById('tab-upgrades').textContent = t.tabUpgrades;
+            document.getElementById('tab-workers').textContent = t.tabWorkers;
+            document.getElementById('tab-jobs').textContent = t.tabJobs;
+            document.getElementById('search-box').placeholder = t.searchPlaceholder;
+            document.getElementById('sort-label').textContent = t.sortLabel;
+            document.getElementById('label-per-click').textContent = t.labelPerClick;
+            document.getElementById('label-temp').textContent = t.labelTemp;
+            document.getElementById('label-power-usage').textContent = t.labelPowerUsage;
+            document.getElementById('label-power-limit').textContent = t.labelPowerLimit;
+            document.getElementById('label-cooling').textContent = t.labelCooling;
+            document.getElementById('label-efficiency').textContent = t.labelEfficiency;
+            document.getElementById('label-electricity-cost').textContent = t.labelElectricityCost;
+            document.getElementById('label-overclock').textContent = t.labelOverclock;
+            document.getElementById('overclock-desc').textContent = t.overclockDesc;
+            document.getElementById('overclock-btn-text').textContent = gameState.isOverclocked ? t.overclockBtnDisable : t.overclockBtnEnable;
+        }
+
+        // Render upgrades
+        function renderUpgrades() {
+            const t = translations[gameState.currentLang];
+            const container = document.getElementById('upgrades-list');
+            container.innerHTML = upgrades.map(upgrade => {
+                const level = gameState.upgrades[upgrade.id] || 0;
+                const cost = upgrade.cost * Math.pow(1.5, level);
+                const canAfford = gameState.money >= cost;
+                
+                return `
+                    <div class="item">
+                        <div class="item-header">
+                            <span class="item-name">${upgrade.name[gameState.currentLang]}</span>
+                            <span class="item-level">${t.level} ${level}</span>
+                        </div>
+                        <div class="item-stats">
+                            <span class="item-stat"><i class="fa fa-dollar-sign"></i> ${formatMoney(cost)}</span>
+                            <span class="item-stat"><i class="fa fa-arrow-up"></i> +${formatMoney(upgrade.boost)}</span>
+                        </div>
+                        <button class="btn btn-primary" onclick="buyUpgrade('${upgrade.id}')" ${!canAfford ? 'disabled' : ''}>
+                            ${t.buy}
+                        </button>
+                    </div>
+                `;
+            }).join('');
+        }
+
+        // Render workers
+        function renderWorkers() {
+            const t = translations[gameState.currentLang];
+            const container = document.getElementById('workers-list');
+            container.innerHTML = workers.map(worker => {
+                const count = gameState.workers[worker.id] || 0;
+                const cost = worker.cost * Math.pow(1.15, count);
+                const canAfford = gameState.money >= cost;
+                
+                return `
+                    <div class="item">
+                        <div class="item-header">
+                            <span class="item-name">${worker.name[gameState.currentLang]}</span>
+                            <span class="item-level">x${count}</span>
+                        </div>
+                        <div class="item-stats">
+                            <span class="item-stat"><i class="fa fa-dollar-sign"></i> ${formatMoney(cost)}</span>
+                            <span class="item-stat"><i class="fa fa-chart-line"></i> ${formatMoney(worker.income)}/s</span>
+                        </div>
+                        ${count > 0 ? `<div class="item-stats"><span style="color: var(--accent-success)"><i class="fa fa-check"></i> ${t.producing} ${formatMoney(worker.income * count)}/s</span></div>` : ''}
+                        <button class="btn btn-primary" onclick="hireWorker('${worker.id}')" ${!canAfford ? 'disabled' : ''}>
+                            ${t.hire}
+                        </button>
+                    </div>
+                `;
+            }).join('');
+        }
+
+        // Render jobs
+        function renderJobs() {
+            const t = translations[gameState.currentLang];
+            const container = document.getElementById('jobs-list');
+            container.innerHTML = jobs.map(job => {
+                const unlocked = gameState.jobs[job.id] || false;
+                const canAfford = gameState.money >= job.cost;
+                
+                return `
+                    <div class="item ${unlocked ? 'owned' : ''}">
+                        <div class="item-header">
+                            <span class="item-name">${job.name[gameState.currentLang]}</span>
+                            ${unlocked ? `<span class="item-level"><i class="fa fa-check"></i> ${t.owned}</span>` : ''}
+                        </div>
+                        <div class="item-stats">
+                            <span class="item-stat"><i class="fa fa-dollar-sign"></i> ${formatMoney(job.cost)}</span>
+                            <span class="item-stat"><i class="fa fa-arrow-up"></i> +${formatMoney(job.unlock)}/click</span>
+                        </div>
+                        ${!unlocked ? `<button class="btn btn-success" onclick="unlockJob('${job.id}')" ${!canAfford ? 'disabled' : ''}>${t.unlock}</button>` : ''}
+                    </div>
+                `;
+            }).join('');
+        }
+
+        // Render marketplace
+        let currentCategory = 'all';
+        let searchTerm = '';
+
+        function renderMarketplace() {
+            const t = translations[gameState.currentLang];
+            const container = document.getElementById('marketplace-grid');
+            
+            // Determine which items to show
+            const itemsToShow = gameState.showBlackMarket ? allMarketItems : marketplaceItems;
+            
+            let filtered = itemsToShow.filter(item => {
+                if (gameState.showBlackMarket && !item.isBlackMarket) return false;
+                if (!gameState.showBlackMarket && item.isBlackMarket) return false;
+                
+                const matchCategory = currentCategory === 'all' || currentCategory === 'blackmarket' || item.category === currentCategory;
+                const matchSearch = item.name.toLowerCase().includes(searchTerm.toLowerCase());
+                return matchCategory && matchSearch;
+            });
+
+            // Apply sorting
+            const sortBy = gameState.currentSort || 'default';
+            if (sortBy === 'price-low') {
+                filtered.sort((a, b) => a.price - b.price);
+            } else if (sortBy === 'price-high') {
+                filtered.sort((a, b) => b.price - a.price);
+            } else if (sortBy === 'newest') {
+                filtered.sort((a, b) => b.year - a.year);
+            } else if (sortBy === 'boost-high') {
+                filtered.sort((a, b) => b.boost - a.boost);
+            }
+
+            // Show/hide black market header
+            const bmHeader = document.getElementById('black-market-header');
+            bmHeader.style.display = gameState.showBlackMarket ? 'block' : 'none';
+
+            container.innerHTML = filtered.map(item => {
+                const canAfford = gameState.money >= item.price;
+                const catName = categories[item.category].name[gameState.currentLang];
+                
+                // Check compatibility
+                let compatWarning = '';
+                if (item.category === 'cpu' || item.category === 'motherboard' || item.category === 'ram') {
+                    const build = gameState.currentBuild;
+                    
+                    if (item.category === 'cpu' && build.motherboard) {
+                        if (item.socket !== 'universal' && build.motherboard.socket !== 'universal' && item.socket !== build.motherboard.socket) {
+                            compatWarning = `<div class="compatibility-warning">⚠️ Incompatible with your ${build.motherboard.socket} motherboard!</div>`;
+                        }
+                    } else if (item.category === 'motherboard' && build.cpu) {
+                        if (item.socket !== 'universal' && build.cpu.socket !== 'universal' && item.socket !== build.cpu.socket) {
+                            compatWarning = `<div class="compatibility-warning">⚠️ Incompatible with your ${build.cpu.socket} CPU!</div>`;
+                        }
+                    } else if (item.category === 'ram' && build.motherboard) {
+                        if (item.ramType !== 'universal' && build.motherboard.ramType !== 'universal' && item.ramType !== build.motherboard.ramType) {
+                            compatWarning = `<div class="compatibility-warning">⚠️ Requires ${build.motherboard.ramType} motherboard!</div>`;
+                        }
+                    }
+                }
+                
+                // Calculate price change indicator
+                let priceChangeHTML = '';
+                if (!item.isBlackMarket && gameState.priceMultipliers[item.id]) {
+                    const mult = gameState.priceMultipliers[item.id];
+                    const change = Math.round((mult - 1) * 100);
+                    const arrow = change > 0 ? '▲' : '▼';
+                    const colorClass = change > 0 ? 'price-up' : 'price-down';
+                    priceChangeHTML = `<div class="price-change ${colorClass}">${arrow} ${Math.abs(change)}%</div>`;
+                }
+
+                // Black market discount badge
+                let discountHTML = '';
+                if (item.isBlackMarket) {
+                    const originalPrice = marketplaceItems.find(i => i.id === item.id.replace('bm_', ''))?.basePrice || item.price;
+                    const discount = Math.round((1 - item.price / originalPrice) * 100);
+                    discountHTML = `<div class="discount-badge">-${discount}% OFF!</div>`;
+                }
+
+                // Quality badge for purchased black market items
+                let qualityHTML = '';
+                if (item.quality) {
+                    const qualityClass = item.quality === 'authentic' ? 'quality-authentic' : 
+                                       item.quality === 'refurbished' ? 'quality-refurbished' : 'quality-fake';
+                    const qualityText = t[item.quality];
+                    qualityHTML = `<div class="quality-badge ${qualityClass}">${qualityText}</div>`;
+                }
+                
+                const itemClass = item.isBlackMarket ? 'marketplace-item black-market' : 'marketplace-item';
+                const ownedClass = item.owned ? 'owned' : '';
+                
+                return `
+                    <div class="${itemClass} ${ownedClass}">
+                        <div class="item-category-badge">${catName}</div>
+                        <div class="item-icon"><i class="fa ${item.icon}"></i></div>
+                        <div class="item-name">${item.name}</div>
+                        ${discountHTML}
+                        <div class="item-price">${formatMoney(item.price)}</div>
+                        ${priceChangeHTML}
+                        <div class="item-boost">+${formatMoney(item.boost)}/s</div>
+                        ${qualityHTML}
+                        ${compatWarning}
+                        ${item.owned ? 
+                            `<div style="color: var(--accent-success); font-weight: 700; font-size: 0.8em;"><i class="fa fa-check"></i> ${t.owned}</div>` :
+                            `<button class="btn btn-primary" onclick="buyMarketItem('${item.id}')" ${!canAfford ? 'disabled' : ''}>${t.buy}</button>`
+                        }
+                    </div>
+                `;
+            }).join('');
+        }
+
+        // Render categories
+        function renderCategories() {
+            const container = document.getElementById('category-filter');
+            const t = translations[gameState.currentLang];
+            
+            let html = `
+                <button class="category-btn ${currentCategory === 'all' && !gameState.showBlackMarket ? 'active' : ''}" onclick="filterCategory('all')">${t.allItems}</button>
+                <button class="category-btn ${gameState.showBlackMarket ? 'active' : ''}" onclick="toggleBlackMarket()" style="background: rgba(239, 68, 68, 0.1); border-color: #ef4444; color: #ef4444;">
+                    <i class="fa fa-skull-crossbones"></i> ${t.blackMarketItems}
+                </button>
+            `;
+            
+            if (!gameState.showBlackMarket) {
+                Object.keys(categories).forEach(cat => {
+                    html += `<button class="category-btn ${currentCategory === cat ? 'active' : ''}" onclick="filterCategory('${cat}')">${categories[cat].name[gameState.currentLang]}</button>`;
+                });
+            }
+            container.innerHTML = html;
+        }
+
+        // Toggle Black Market
+        function toggleBlackMarket() {
+            gameState.showBlackMarket = !gameState.showBlackMarket;
+            if (gameState.showBlackMarket) {
+                currentCategory = 'blackmarket';
+            } else {
+                currentCategory = 'all';
+            }
+            renderCategories();
+            renderMarketplace();
+        }
+
+        // Render inventory
+        function renderInventory() {
+            const container = document.getElementById('inventory-grid');
+            const t = translations[gameState.currentLang];
+            const owned = allMarketItems.filter(item => item.owned);
+            
+            if (owned.length === 0) {
+                container.innerHTML = '<div style="grid-column: 1/-1; text-align: center; color: var(--text-secondary); padding: 40px;">No items yet</div>';
+                return;
+            }
+
+            container.innerHTML = owned.map(item => {
+                let qualityBadge = '';
+                if (item.quality) {
+                    const qualityClass = item.quality === 'authentic' ? 'quality-authentic' : 
+                                       item.quality === 'refurbished' ? 'quality-refurbished' : 'quality-fake';
+                    const qualityText = t[item.quality];
+                    qualityBadge = `<div class="quality-badge ${qualityClass}" style="font-size: 0.65em; padding: 2px 6px;">${qualityText}</div>`;
+                }
+                
+                // Calculate sell price
+                const sellPrice = item.isBlackMarket ? item.price * 0.25 : item.price * 0.5;
+                
+                return `
+                    <div class="inventory-item">
+                        <div class="item-menu">
+                            <button class="menu-button" onclick="toggleMenu(event, '${item.id}')">
+                                <i class="fa fa-ellipsis-vertical"></i>
+                            </button>
+                            <div class="menu-dropdown" id="menu-${item.id}">
+                                <div class="menu-item sell-item" onclick="sellItem('${item.id}')">
+                                    <i class="fa fa-dollar-sign"></i>
+                                    ${t.sell} ${formatMoney(sellPrice)}
+                                </div>
+                            </div>
+                        </div>
+                        <div class="item-icon" style="font-size: 2em; height: auto; margin-bottom: 8px;"><i class="fa ${item.icon}"></i></div>
+                        <div style="font-size: 0.85em; margin-top: 6px;">${item.name}</div>
+                        ${qualityBadge}
+                        <div style="color: var(--accent-success); font-size: 0.8em; margin-top: 4px;">+${formatMoney(item.boost)}/s</div>
+                    </div>
+                `
+            }).join('');
+        }
+
+        // Toggle menu dropdown
+        function toggleMenu(event, itemId) {
+            event.stopPropagation();
+            const menu = document.getElementById(`menu-${itemId}`);
+            
+            // Close all other menus
+            document.querySelectorAll('.menu-dropdown').forEach(m => {
+                if (m.id !== `menu-${itemId}`) {
+                    m.classList.remove('active');
+                }
+            });
+            
+            menu.classList.toggle('active');
+        }
+
+        // Close menus when clicking outside
+        document.addEventListener('click', function() {
+            document.querySelectorAll('.menu-dropdown').forEach(m => {
+                m.classList.remove('active');
+            });
+        });
+
+        // Sell item function
+        function sellItem(id) {
+            const item = allMarketItems.find(i => i.id === id);
+            const t = translations[gameState.currentLang];
+            
+            if (!item || !item.owned) return;
+            
+            // Calculate sell price
+            const sellPrice = item.isBlackMarket ? item.price * 0.25 : item.price * 0.5;
+            
+            // Remove item
+            item.owned = false;
+            delete gameState.inventory[id];
+            gameState.incomePerSecond -= item.boost;
+            gameState.money += sellPrice;
+            
+            // Clear quality for black market items
+            if (item.isBlackMarket) {
+                item.quality = null;
+            }
+            
+            renderInventory();
+            renderMarketplace();
+            updateUI();
+            saveGame();
+        }
+
+        // Search
+        document.getElementById('search-box').addEventListener('input', function(e) {
+            searchTerm = e.target.value;
+            renderMarketplace();
+        });
+
+        // Sort
+        document.getElementById('sort-select').addEventListener('change', function(e) {
+            gameState.currentSort = e.target.value;
+            renderMarketplace();
+        });
+
+        // Filter category
+        function filterCategory(cat) {
+            gameState.showBlackMarket = false;
+            currentCategory = cat;
+            renderCategories();
+            renderMarketplace();
+        }
+
+        // Buy upgrade
+        function buyUpgrade(id) {
+            const upgrade = upgrades.find(u => u.id === id);
+            const level = gameState.upgrades[id] || 0;
+            const cost = upgrade.cost * Math.pow(1.5, level);
+            
+            if (gameState.money >= cost) {
+                gameState.money -= cost;
+                gameState.upgrades[id] = level + 1;
+                gameState.incomePerClick += upgrade.boost;
+                renderUpgrades();
+                updateUI();
+                saveGame();
+            }
+        }
+
+        // Hire worker
+        function hireWorker(id) {
+            const worker = workers.find(w => w.id === id);
+            const count = gameState.workers[id] || 0;
+            const cost = worker.cost * Math.pow(1.15, count);
+            
+            if (gameState.money >= cost) {
+                gameState.money -= cost;
+                gameState.workers[id] = count + 1;
+                gameState.incomePerSecond += worker.income;
+                renderWorkers();
+                updateUI();
+                saveGame();
+            }
+        }
+
+        // Unlock job
+        function unlockJob(id) {
+            const job = jobs.find(j => j.id === id);
+            
+            if (gameState.money >= job.cost && !gameState.jobs[id]) {
+                gameState.money -= job.cost;
+                gameState.jobs[id] = true;
+                gameState.incomePerClick += job.unlock;
+                renderJobs();
+                updateUI();
+                saveGame();
+            }
+        }
+
+        // Buy marketplace item
+        function buyMarketItem(id) {
+            const item = allMarketItems.find(i => i.id === id);
+            const t = translations[gameState.currentLang];
+            
+            if (gameState.money >= item.price && !item.owned) {
+                gameState.money -= item.price;
+                item.owned = true;
+                
+                // Black Market RNG
+                if (item.isBlackMarket) {
+                    const roll = Math.random();
+                    
+                    if (roll < 0.3) {
+                        // 30% - Authentic! Full performance
+                        item.quality = 'authentic';
+                        item.boost = item.baseBoost;
+                        showDisasterPopup(
+                            '✅',
+                            'AUTHENTIC ITEM',
+                            `${item.name}<br><br>Genuine product! Full performance guaranteed.<br>You got lucky on the black market!`,
+                            `Income: +${formatMoney(item.boost)}/s`
+                        );
+                    } else if (roll < 0.8) {
+                        // 50% - Refurbished, 50% performance, heats faster
+                        item.quality = 'refurbished';
+                        item.boost = item.baseBoost * 0.5;
+                        item.watts = item.watts * 1.3; // More power hungry
+                        showDisasterPopup(
+                            '⚠️',
+                            'REFURBISHED ITEM',
+                            `${item.name}<br><br>Used component detected!<br>Performance: 50% of original<br>Power consumption: +30%`,
+                            `Reduced income: +${formatMoney(item.boost)}/s`
+                        );
+                    } else {
+                        // 20% - FAKE! Explodes or drains money
+                        item.quality = 'fake';
+                        const scamType = Math.random();
+                        
+                        if (scamType < 0.5) {
+                            // Component explodes immediately
+                            item.owned = false;
+                            item.boost = 0;
+                            showDisasterPopup(
+                                '💥',
+                                'COUNTERFEIT DETECTED!',
+                                `${item.name}<br><br>COMPONENT EXPLODED ON STARTUP!<br>Fake hardware identified - critical failure.<br>Money lost!`,
+                                `Total loss: -${formatMoney(item.price)}`
+                            );
+                        } else {
+                            // Massive power drain (short circuit)
+                            item.boost = 0;
+                            item.watts = item.watts * 10; // 10x power consumption!
+                            showDisasterPopup(
+                                '⚡',
+                                'SHORT CIRCUIT!',
+                                `${item.name}<br><br>ELECTRICAL FAULT DETECTED!<br>Component drawing 10x normal power.<br>Massive electricity drain!`,
+                                `Power draw: ${item.watts}W (10x normal)`
+                            );
+                        }
+                    }
+                }
+                
+                gameState.inventory[id] = true;
+                if (item.quality !== 'fake' || Math.random() >= 0.5) {
+                    gameState.incomePerSecond += item.boost;
+                }
+                
+                // Check compatibility after purchase
+                const issues = checkCompatibility();
+                if (issues.length > 0 && issues.some(i => i.type === 'critical')) {
+                    // Show compatibility warning
+                    const criticalIssues = issues.filter(i => i.type === 'critical');
+                    setTimeout(() => {
+                        showDisasterPopup(
+                            '⚠️',
+                            'COMPATIBILITY WARNING',
+                            criticalIssues.map(i => i.message).join('<br><br>'),
+                            `Penalty: -$${gameState.incompatibilityPenalty}/s until fixed!`
+                        );
+                    }, 500);
+                }
+                
+                renderMarketplace();
+                renderInventory();
+                updateUI();
+                saveGame();
+            }
+        }
+
+        // Tabs
+        document.querySelectorAll('.tab').forEach(tab => {
+            tab.addEventListener('click', function() {
+                const target = this.dataset.tab;
+                document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+                document.querySelectorAll('.tab-content').forEach(c => c.classList.remove('active'));
+                this.classList.add('active');
+                document.getElementById(target).classList.add('active');
+            });
+        });
+
+        // Passive income and heat system
+        setInterval(() => {
+            // Update heat and power
+            updateHeatSystem(0.1);
+            
+            // Check for disasters
+            checkDisasters();
+            
+            // Check compatibility
+            checkCompatibility();
+            
+            // Calculate effective income
+            const ocMultiplier = gameState.isOverclocked ? gameState.overclockMultiplier : 1;
+            const effectiveIncome = gameState.incomePerSecond * ocMultiplier * gameState.efficiency;
+            
+            if (effectiveIncome > 0) {
+                gameState.money += effectiveIncome / 10;
+            }
+            
+            // Apply incompatibility penalty
+            if (gameState.incompatibilityPenalty > 0) {
+                gameState.money -= gameState.incompatibilityPenalty / 10;
+            }
+            
+            updateUI();
+        }, 100);
+
+        // Market updates every 30 seconds
+        setInterval(() => {
+            updateMarketPrices();
+            if (!gameState.showBlackMarket) {
+                renderMarketplace();
+            }
+        }, 30000);
+
+        // Auto-save
+        setInterval(saveGame, 5000);
+
+        // Render all
+        function renderAll() {
+            renderUpgrades();
+            renderWorkers();
+            renderJobs();
+            renderCategories();
+            renderMarketplace();
+            renderInventory();
+            updateUI();
+        }
+
+        // Initialize
+        loadGame();
+        updateLanguage();
+        updateNewsTicker({ type: 'normal', text: 'Market opens! Welcome to PC Builder Tycoon' });
+        renderAll();
+    </script>
+</body>
+</html>
