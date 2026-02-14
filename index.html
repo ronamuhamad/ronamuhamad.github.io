@@ -1,4 +1,4 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
@@ -917,6 +917,78 @@
             cursor: not-allowed;
         }
 
+        .power-reset-btn {
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            background: linear-gradient(145deg, #ef4444, #dc2626);
+            border: none;
+            color: white;
+            font-size: 1.4em;
+            cursor: pointer;
+            position: relative;
+            transition: all 0.3s ease;
+            box-shadow: 
+                0 4px 8px rgba(0, 0, 0, 0.3),
+                0 2px 4px rgba(0, 0, 0, 0.2),
+                inset 0 -3px 6px rgba(0, 0, 0, 0.4),
+                inset 0 2px 6px rgba(255, 255, 255, 0.3);
+        }
+
+        .power-reset-btn::before {
+            content: '';
+            position: absolute;
+            top: 8px;
+            left: 10px;
+            width: 18px;
+            height: 15px;
+            background: linear-gradient(135deg, rgba(255,255,255,0.5) 0%, rgba(255,255,255,0) 70%);
+            border-radius: 50%;
+            filter: blur(3px);
+        }
+
+        .power-reset-btn:hover:not(:disabled) {
+            transform: translateY(-2px);
+            box-shadow: 
+                0 6px 12px rgba(239, 68, 68, 0.4),
+                0 3px 6px rgba(0, 0, 0, 0.3),
+                inset 0 -3px 6px rgba(0, 0, 0, 0.4),
+                inset 0 2px 8px rgba(255, 255, 255, 0.4);
+            background: linear-gradient(145deg, #f87171, #ef4444);
+        }
+
+        .power-reset-btn:active:not(:disabled) {
+            transform: translateY(1px);
+            box-shadow: 
+                0 2px 4px rgba(0, 0, 0, 0.3),
+                inset 0 -2px 4px rgba(0, 0, 0, 0.5),
+                inset 0 1px 4px rgba(255, 255, 255, 0.2);
+        }
+
+        .power-reset-btn:disabled {
+            opacity: 0.4;
+            cursor: not-allowed;
+            filter: grayscale(0.5);
+        }
+
+        .reset-tooltip {
+            position: absolute;
+            top: 70px;
+            right: 20px;
+            background: rgba(0, 0, 0, 0.9);
+            color: white;
+            padding: 6px 12px;
+            border-radius: 6px;
+            font-size: 0.75em;
+            white-space: nowrap;
+            pointer-events: none;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
+        }
+
+        .header-content {
+            position: relative;
+        }
+
         .tax-display {
             color: #ef4444;
             font-weight: 600;
@@ -1160,6 +1232,10 @@
                     <option value="en">English</option>
                     <option value="vi">Tiếng Việt</option>
                 </select>
+                <button class="power-reset-btn" id="reset-btn" onclick="performReset()" title="Reset Game (1 per week)">
+                    <i class="fa fa-power-off"></i>
+                </button>
+                <div class="reset-tooltip" id="reset-cooldown">Available</div>
             </div>
         </header>
 
@@ -1217,13 +1293,6 @@
                     <button class="btn btn-danger" id="overclock-btn" onclick="toggleOverclock()">
                         <i class="fa fa-bolt"></i> <span id="overclock-btn-text">ENABLE OVERCLOCK</span>
                     </button>
-                </div>
-
-                <div class="reset-section">
-                    <div class="reset-title">DEVELOPER RESET</div>
-                    <div class="reset-info">Reset all progress. 0.0001% chance to receive RTX 4090, 2TB SSD, 128GB RAM as starter bonus.</div>
-                    <div class="reset-cooldown" id="reset-cooldown">Available: 1 reset per week</div>
-                    <button class="btn-reset" id="reset-btn" onclick="performReset()">RESET GAME</button>
                 </div>
                 
                 <div class="tabs">
@@ -2668,9 +2737,11 @@
             if (resetCooldown) {
                 if (!resetAvailable) {
                     const remaining = Math.ceil((weekMs - (now - gameState.lastReset)) / (24 * 60 * 60 * 1000));
-                    resetCooldown.textContent = `Cooldown: ${remaining} days remaining`;
+                    resetCooldown.textContent = `${remaining}d cooldown`;
+                    resetCooldown.style.color = '#f59e0b';
                 } else {
-                    resetCooldown.textContent = 'Available: 1 reset per week';
+                    resetCooldown.textContent = 'Available';
+                    resetCooldown.style.color = '#10b981';
                 }
             }
         }, 1000);
