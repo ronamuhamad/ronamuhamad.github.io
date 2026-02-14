@@ -1,4 +1,4 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
@@ -1350,6 +1350,140 @@
             }
         }
 
+        .game-footer {
+            margin-top: 40px;
+            padding: 30px 20px;
+            border-top: 1px solid var(--border);
+            text-align: center;
+        }
+
+        .footer-links {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 15px;
+            margin-bottom: 15px;
+        }
+
+        .footer-link {
+            color: var(--text-secondary);
+            text-decoration: none;
+            font-size: 0.9em;
+            transition: color 0.2s ease;
+        }
+
+        .footer-link:hover {
+            color: var(--accent-primary);
+            text-decoration: underline;
+        }
+
+        .footer-separator {
+            color: var(--text-secondary);
+            opacity: 0.5;
+        }
+
+        .footer-copyright {
+            color: var(--text-secondary);
+            font-size: 0.85em;
+        }
+
+        .policy-modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.9);
+            z-index: 99999;
+            overflow: auto;
+            padding: 20px;
+        }
+
+        .policy-content {
+            background: var(--bg-secondary);
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            max-width: 800px;
+            margin: 40px auto;
+            padding: 40px;
+            position: relative;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.5);
+        }
+
+        .policy-close {
+            position: absolute;
+            top: 15px;
+            right: 15px;
+            background: none;
+            border: none;
+            color: var(--text-primary);
+            font-size: 2em;
+            cursor: pointer;
+            width: 40px;
+            height: 40px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 50%;
+            transition: all 0.2s ease;
+        }
+
+        .policy-close:hover {
+            background: rgba(239, 68, 68, 0.2);
+            color: #ef4444;
+        }
+
+        .policy-content h1 {
+            color: var(--accent-primary);
+            font-size: 2em;
+            margin-bottom: 10px;
+        }
+
+        .policy-content h2 {
+            color: var(--text-primary);
+            font-size: 1.5em;
+            margin-top: 30px;
+            margin-bottom: 15px;
+        }
+
+        .policy-content p {
+            color: var(--text-secondary);
+            line-height: 1.8;
+            margin-bottom: 15px;
+        }
+
+        .policy-content ul {
+            color: var(--text-secondary);
+            line-height: 1.8;
+            margin-left: 20px;
+            margin-bottom: 15px;
+        }
+
+        .policy-content strong {
+            color: var(--text-primary);
+        }
+
+        .policy-updated {
+            color: var(--text-secondary);
+            font-size: 0.9em;
+            font-style: italic;
+            margin-bottom: 30px;
+        }
+
+        body.mobile-mode .policy-content {
+            padding: 20px;
+            margin: 20px auto;
+        }
+
+        body.mobile-mode .policy-content h1 {
+            font-size: 1.5em;
+        }
+
+        body.mobile-mode .policy-content h2 {
+            font-size: 1.2em;
+        }
+
         @media (max-width: 600px) {
             .device-options {
                 grid-template-columns: 1fr;
@@ -1530,6 +1664,24 @@
             <div class="card-title" id="card-inventory">MY INVENTORY</div>
             <div class="inventory-grid" id="inventory-grid"></div>
         </div>
+
+        <footer class="game-footer">
+            <div class="footer-links">
+                <a href="#" class="footer-link" onclick="showPolicy('terms'); return false;">Terms of Service</a>
+                <span class="footer-separator">•</span>
+                <a href="#" class="footer-link" onclick="showPolicy('privacy'); return false;">Privacy Policy</a>
+                <span class="footer-separator">•</span>
+                <a href="#" class="footer-link" onclick="showPolicy('anticheat'); return false;">Anti-Cheat</a>
+            </div>
+            <div class="footer-copyright">© 2026 Resswo. All rights reserved.</div>
+        </footer>
+    </div>
+
+    <div id="policy-modal" class="policy-modal">
+        <div class="policy-content">
+            <button class="policy-close" onclick="closePolicy()">×</button>
+            <div id="policy-text"></div>
+        </div>
     </div>
 
     <script>
@@ -1543,6 +1695,134 @@
                 overlay.style.display = 'none';
             }, 500);
         }
+
+        const policyContent = {
+            terms: `
+                <h1>Terms of Service</h1>
+                <p class="policy-updated">Last Updated: February 14, 2026</p>
+                
+                <h2>1. Acceptance of Terms</h2>
+                <p>By accessing and playing PC Builder Tycoon, you agree to be bound by these Terms of Service. If you do not agree, please discontinue use immediately.</p>
+                
+                <h2>2. Game Rules</h2>
+                <ul>
+                    <li><strong>Fair Play:</strong> Players must not use cheats, exploits, or unauthorized modifications</li>
+                    <li><strong>Account Responsibility:</strong> You are responsible for all activity on your account</li>
+                    <li><strong>Reset Limits:</strong> Developer reset is limited to once per week per account</li>
+                    <li><strong>Black Market:</strong> Purchases are final and results are random (30/50/20 odds)</li>
+                </ul>
+                
+                <h2>3. Prohibited Activities</h2>
+                <ul>
+                    <li>Using automated scripts, bots, or macros</li>
+                    <li>Manipulating game files or local storage</li>
+                    <li>Exploiting bugs or glitches for unfair advantage</li>
+                    <li>Sharing or selling accounts</li>
+                </ul>
+                
+                <h2>4. Consequences</h2>
+                <p>Violation of these terms may result in account reset, temporary suspension, or permanent ban at our discretion.</p>
+                
+                <h2>5. Changes to Terms</h2>
+                <p>We reserve the right to modify these terms at any time. Continued use constitutes acceptance of updated terms.</p>
+                
+                <h2>6. Disclaimer</h2>
+                <p>The game is provided "as is" without warranties. Virtual items and progress have no real-world value.</p>
+            `,
+            privacy: `
+                <h1>Privacy Policy</h1>
+                <p class="policy-updated">Last Updated: February 14, 2026</p>
+                
+                <h2>1. Information We Collect</h2>
+                <p><strong>Local Storage:</strong> PC Builder Tycoon stores game progress locally in your browser using localStorage. This includes:</p>
+                <ul>
+                    <li>Game progress (money, level, items)</li>
+                    <li>Settings (language preference)</li>
+                    <li>Reset cooldown timestamp</li>
+                </ul>
+                
+                <h2>2. Data Storage</h2>
+                <p><strong>No Server Storage:</strong> All game data is stored <strong>only on your device</strong>. We do not collect, transmit, or store any personal information on external servers.</p>
+                
+                <h2>3. Third-Party Services</h2>
+                <p>We use Font Awesome icons (CDN) and Google Fonts. These services may collect basic usage data according to their own privacy policies.</p>
+                
+                <h2>4. Cookies</h2>
+                <p>We do not use cookies. Game data is stored via browser localStorage only.</p>
+                
+                <h2>5. Data Control</h2>
+                <ul>
+                    <li><strong>Access:</strong> You can view your data via browser DevTools (Application > Local Storage)</li>
+                    <li><strong>Delete:</strong> Clear browser data or use in-game reset to remove all data</li>
+                    <li><strong>Export:</strong> Not available (all data is local-only)</li>
+                </ul>
+                
+                <h2>6. Children's Privacy</h2>
+                <p>The game does not knowingly collect information from children under 13. No personal data is collected from any users.</p>
+                
+                <h2>7. Changes to Policy</h2>
+                <p>Updates to this policy will be posted here with a new "Last Updated" date.</p>
+            `,
+            anticheat: `
+                <h1>Anti-Cheat Policy</h1>
+                <p class="policy-updated">Last Updated: February 14, 2026</p>
+                
+                <h2>1. Fair Play Commitment</h2>
+                <p>PC Builder Tycoon is designed for legitimate gameplay. We employ multiple systems to detect and prevent cheating.</p>
+                
+                <h2>2. Prohibited Methods</h2>
+                <ul>
+                    <li><strong>LocalStorage Manipulation:</strong> Editing save data via browser DevTools</li>
+                    <li><strong>Auto-Clickers:</strong> Using macros or scripts to automate clicking</li>
+                    <li><strong>Time Manipulation:</strong> Changing system time to bypass cooldowns</li>
+                    <li><strong>Memory Editing:</strong> Modifying game variables via console or extensions</li>
+                    <li><strong>Code Injection:</strong> Running unauthorized scripts in browser console</li>
+                </ul>
+                
+                <h2>3. Detection Systems</h2>
+                <p>Our anti-cheat includes:</p>
+                <ul>
+                    <li>Integrity checks on game state values</li>
+                    <li>Timestamp validation for cooldowns</li>
+                    <li>Rate limiting on actions (clicking, purchases)</li>
+                    <li>Anomaly detection for impossible values</li>
+                </ul>
+                
+                <h2>4. Penalties</h2>
+                <p><strong>First Offense:</strong> Warning + Progress reset<br>
+                <strong>Second Offense:</strong> 7-day cooldown on all resets<br>
+                <strong>Third Offense:</strong> Permanent game reset on load</p>
+                
+                <h2>5. False Positives</h2>
+                <p>If you believe you were incorrectly flagged, you may clear your browser data and restart. Persistent flags indicate actual violations.</p>
+                
+                <h2>6. Reporting</h2>
+                <p>To report suspected cheating or exploits, you may document the issue via browser screenshots. However, as this is a single-player game with no leaderboards, enforcement is primarily self-regulated.</p>
+                
+                <h2>7. Updates</h2>
+                <p>Anti-cheat systems are continuously updated to address new exploit methods.</p>
+            `
+        };
+
+        function showPolicy(type) {
+            const modal = document.getElementById('policy-modal');
+            const content = document.getElementById('policy-text');
+            content.innerHTML = policyContent[type];
+            modal.style.display = 'block';
+            document.body.style.overflow = 'hidden';
+        }
+
+        function closePolicy() {
+            const modal = document.getElementById('policy-modal');
+            modal.style.display = 'none';
+            document.body.style.overflow = 'auto';
+        }
+
+        document.getElementById('policy-modal').addEventListener('click', function(e) {
+            if (e.target === this) {
+                closePolicy();
+            }
+        });
 
         const translations = {
             en: {
