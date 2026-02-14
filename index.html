@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
@@ -1484,6 +1484,197 @@
             font-size: 1.2em;
         }
 
+        .topup-warning {
+            background: rgba(245, 158, 11, 0.1);
+            border: 2px solid var(--accent-warning);
+            border-radius: 8px;
+            padding: 15px;
+            margin-bottom: 20px;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            color: var(--accent-warning);
+        }
+
+        .topup-warning i {
+            font-size: 1.5em;
+        }
+
+        .topup-warning p {
+            margin: 0;
+            font-weight: 600;
+        }
+
+        .topup-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+            gap: 15px;
+        }
+
+        .topup-card {
+            background: var(--bg-card);
+            border: 2px solid var(--border);
+            border-radius: 8px;
+            padding: 20px;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .topup-card:hover {
+            border-color: var(--accent-primary);
+            transform: translateY(-3px);
+            box-shadow: 0 4px 12px rgba(59, 130, 246, 0.3);
+        }
+
+        .topup-icon {
+            font-size: 3em;
+            margin-bottom: 10px;
+        }
+
+        .topup-method {
+            font-size: 1.1em;
+            font-weight: 700;
+            color: var(--text-primary);
+            margin-bottom: 8px;
+        }
+
+        .topup-amount {
+            font-size: 1.5em;
+            font-weight: 900;
+            color: var(--accent-success);
+            margin-bottom: 5px;
+        }
+
+        .topup-price {
+            font-size: 0.9em;
+            color: var(--text-secondary);
+            margin-bottom: 12px;
+        }
+
+        .topup-bonus {
+            background: linear-gradient(135deg, #ef4444, #dc2626);
+            color: white;
+            font-size: 0.75em;
+            font-weight: 700;
+            padding: 3px 8px;
+            border-radius: 4px;
+            display: inline-block;
+            margin-bottom: 12px;
+        }
+
+        .btn-topup {
+            background: var(--accent-primary);
+            color: white;
+            border: none;
+            padding: 8px 20px;
+            border-radius: 6px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            width: 100%;
+        }
+
+        .btn-topup:hover {
+            background: #2563eb;
+            transform: scale(1.05);
+        }
+
+        .scam-badge {
+            background: #ef4444;
+            color: white;
+            font-size: 0.7em;
+            font-weight: 700;
+            padding: 2px 6px;
+            border-radius: 3px;
+            margin-left: 5px;
+        }
+
+        .advanced-stats-section {
+            margin-top: 15px;
+            padding: 12px;
+            background: rgba(59, 130, 246, 0.05);
+            border: 1px solid rgba(59, 130, 246, 0.2);
+            border-radius: 6px;
+        }
+
+        .advanced-stats {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 10px;
+        }
+
+        .advanced-stat {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            padding: 8px;
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            border-radius: 4px;
+            font-size: 0.85em;
+        }
+
+        .advanced-stat i {
+            font-size: 1.2em;
+            color: var(--accent-primary);
+            width: 20px;
+        }
+
+        .advanced-stat span {
+            flex: 1;
+            color: var(--text-primary);
+            font-weight: 600;
+        }
+
+        .stat-toggle {
+            background: var(--bg-primary);
+            border: 1px solid var(--border);
+            color: var(--text-secondary);
+            width: 28px;
+            height: 28px;
+            border-radius: 4px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.2s ease;
+            font-size: 0.9em;
+        }
+
+        .stat-toggle:hover {
+            border-color: var(--accent-primary);
+            color: var(--accent-primary);
+        }
+
+        .stat-toggle.active {
+            background: var(--accent-success);
+            border-color: var(--accent-success);
+            color: white;
+        }
+
+        .battery-low {
+            color: #ef4444 !important;
+            animation: pulse 1s infinite;
+        }
+
+        .battery-charging {
+            color: #10b981 !important;
+        }
+
+        .internet-offline {
+            color: #ef4444 !important;
+        }
+
+        .virus-danger {
+            color: #ef4444 !important;
+            animation: pulse 1s infinite;
+        }
+
+        .mining-active {
+            color: #f59e0b !important;
+        }
+
         @media (max-width: 600px) {
             .device-options {
                 grid-template-columns: 1fr;
@@ -1604,6 +1795,42 @@
                     <span style="color: var(--accent-warning); font-weight: 700;" id="electricity-cost">-$0.00/s</span>
                 </div>
 
+                <div class="advanced-stats-section">
+                    <h4 style="font-size: 0.9em; color: var(--text-secondary); margin-bottom: 10px;">
+                        <i class="fa fa-microchip"></i> SYSTEM STATUS
+                    </h4>
+                    <div class="advanced-stats">
+                        <div class="advanced-stat">
+                            <i class="fa fa-battery-three-quarters" id="battery-icon"></i>
+                            <span id="battery-display">100%</span>
+                            <button class="stat-toggle" id="charge-toggle" onclick="toggleCharging()" title="Toggle Charging">
+                                <i class="fa fa-plug"></i>
+                            </button>
+                        </div>
+                        <div class="advanced-stat">
+                            <i class="fa fa-wifi"></i>
+                            <span id="internet-display">100 Mbps</span>
+                            <button class="stat-toggle" onclick="toggleInternet()" title="Toggle Internet">
+                                <i class="fa fa-power-off"></i>
+                            </button>
+                        </div>
+                        <div class="advanced-stat">
+                            <i class="fa fa-shield-halved"></i>
+                            <span id="virus-display">Safe</span>
+                            <button class="stat-toggle" onclick="toggleAntivirus()" title="Toggle Antivirus">
+                                <i class="fa fa-shield"></i>
+                            </button>
+                        </div>
+                        <div class="advanced-stat">
+                            <i class="fa fa-bitcoin"></i>
+                            <span id="mining-display">Off</span>
+                            <button class="stat-toggle" onclick="toggleMining()" title="Toggle GPU Mining">
+                                <i class="fa fa-power-off"></i>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
                 <div class="overclock-section">
                     <h4><i class="fa fa-fire"></i> <span id="label-overclock">OVERCLOCK ZONE</span></h4>
                     <p style="font-size: 0.8em; color: var(--text-secondary); margin-bottom: 10px;" id="overclock-desc">
@@ -1618,6 +1845,7 @@
                     <button class="tab active" data-tab="upgrades" id="tab-upgrades">Upgrades</button>
                     <button class="tab" data-tab="workers" id="tab-workers">Workers</button>
                     <button class="tab" data-tab="jobs" id="tab-jobs">Jobs</button>
+                    <button class="tab" data-tab="topup" id="tab-topup">Top Up</button>
                 </div>
 
                 <div class="tab-content active" id="upgrades">
@@ -1630,6 +1858,14 @@
 
                 <div class="tab-content" id="jobs">
                     <div class="item-list" id="jobs-list"></div>
+                </div>
+
+                <div class="tab-content" id="topup">
+                    <div class="topup-warning">
+                        <i class="fa fa-exclamation-triangle"></i>
+                        <p>Simulation only - No real money involved!</p>
+                    </div>
+                    <div class="topup-grid" id="topup-grid"></div>
                 </div>
             </div>
 
@@ -1673,7 +1909,7 @@
                 <span class="footer-separator">•</span>
                 <a href="#" class="footer-link" onclick="showPolicy('anticheat'); return false;">Anti-Cheat</a>
             </div>
-            <div class="footer-copyright">© 2026 Resswo. All rights reserved.</div>
+            <div class="footer-copyright">© 2026 PC Builder Tycoon. All rights reserved.</div>
         </footer>
     </div>
 
@@ -1824,6 +2060,151 @@
             }
         });
 
+        function toggleCharging() {
+            gameState.isCharging = !gameState.isCharging;
+            const btn = document.getElementById('charge-toggle');
+            if (gameState.isCharging) {
+                btn.classList.add('active');
+                showToast('info', 'CHARGING', 'Battery charging enabled');
+            } else {
+                btn.classList.remove('active');
+                showToast('info', 'UNPLUGGED', 'Running on battery');
+            }
+        }
+
+        function toggleInternet() {
+            gameState.internetConnection = !gameState.internetConnection;
+            if (!gameState.internetConnection) {
+                showToast('warning', 'OFFLINE', 'Internet disconnected - Black Market unavailable!');
+                if (gameState.showBlackMarket) {
+                    gameState.showBlackMarket = false;
+                    renderMarketplace();
+                }
+            } else {
+                showToast('success', 'ONLINE', 'Internet connected');
+            }
+        }
+
+        function toggleAntivirus() {
+            gameState.antivirusActive = !gameState.antivirusActive;
+            if (gameState.antivirusActive) {
+                showToast('success', 'PROTECTED', 'Antivirus enabled - Virus risk reduced!');
+            } else {
+                showToast('warning', 'UNPROTECTED', 'Antivirus disabled - Higher virus risk!');
+            }
+        }
+
+        function toggleMining() {
+            const gpuCount = allMarketItems.filter(i => i.owned && i.category === 'gpu').length;
+            
+            if (gpuCount === 0) {
+                showToast('error', 'NO GPU', 'Need GPU to start mining!');
+                return;
+            }
+            
+            gameState.gpuMining = !gameState.gpuMining;
+            
+            if (gameState.gpuMining) {
+                gameState.miningIncome = gpuCount * 5;
+                showToast('success', 'MINING STARTED', `+$${gameState.miningIncome}/s from crypto mining`);
+            } else {
+                gameState.miningIncome = 0;
+                showToast('info', 'MINING STOPPED', 'Crypto mining disabled');
+            }
+        }
+
+        function updateAdvancedSystems(deltaTime) {
+            if (!gameState.isCharging && gameState.batteryLevel > 0) {
+                const drainRate = gameState.batteryDrainRate;
+                gameState.batteryLevel -= drainRate * deltaTime;
+                gameState.batteryLevel = Math.max(0, gameState.batteryLevel);
+                
+                if (gameState.batteryLevel === 0) {
+                    showToast('error', 'BATTERY DEAD', 'System shutting down!');
+                    gameState.efficiency = 0;
+                }
+            } else if (gameState.isCharging && gameState.batteryLevel < 100) {
+                gameState.batteryLevel += 2 * deltaTime;
+                gameState.batteryLevel = Math.min(100, gameState.batteryLevel);
+            }
+            
+            if (gameState.gpuMining) {
+                gameState.money += gameState.miningIncome / 10;
+                gameState.temperature += 0.5 * deltaTime;
+            }
+            
+            if (!gameState.antivirusActive) {
+                gameState.virusRisk += 0.1 * deltaTime;
+                gameState.virusRisk = Math.min(100, gameState.virusRisk);
+                
+                if (gameState.virusRisk > 80 && Math.random() < 0.001) {
+                    const loss = gameState.money * 0.1;
+                    gameState.money -= loss;
+                    gameState.virusRisk = 0;
+                    showToast('error', 'VIRUS ATTACK', `Lost ${formatMoney(loss)} to ransomware!`);
+                }
+            } else {
+                gameState.virusRisk -= 1 * deltaTime;
+                gameState.virusRisk = Math.max(0, gameState.virusRisk);
+            }
+            
+            updateAdvancedStatsUI();
+        }
+
+        function updateAdvancedStatsUI() {
+            const batteryIcon = document.getElementById('battery-icon');
+            const batteryDisplay = document.getElementById('battery-display');
+            const internetDisplay = document.getElementById('internet-display');
+            const virusDisplay = document.getElementById('virus-display');
+            const miningDisplay = document.getElementById('mining-display');
+            
+            if (batteryDisplay) {
+                batteryDisplay.textContent = Math.round(gameState.batteryLevel) + '%';
+                batteryDisplay.className = '';
+                if (gameState.isCharging) {
+                    batteryDisplay.classList.add('battery-charging');
+                } else if (gameState.batteryLevel < 20) {
+                    batteryDisplay.classList.add('battery-low');
+                }
+            }
+            
+            if (batteryIcon) {
+                if (gameState.batteryLevel > 75) {
+                    batteryIcon.className = 'fa fa-battery-full';
+                } else if (gameState.batteryLevel > 50) {
+                    batteryIcon.className = 'fa fa-battery-three-quarters';
+                } else if (gameState.batteryLevel > 25) {
+                    batteryIcon.className = 'fa fa-battery-half';
+                } else if (gameState.batteryLevel > 10) {
+                    batteryIcon.className = 'fa fa-battery-quarter';
+                } else {
+                    batteryIcon.className = 'fa fa-battery-empty';
+                }
+            }
+            
+            if (internetDisplay) {
+                internetDisplay.textContent = gameState.internetConnection ? `${gameState.internetSpeed} Mbps` : 'Offline';
+                internetDisplay.className = gameState.internetConnection ? '' : 'internet-offline';
+            }
+            
+            if (virusDisplay) {
+                if (gameState.virusRisk > 50) {
+                    virusDisplay.textContent = 'Danger';
+                    virusDisplay.classList.add('virus-danger');
+                } else if (gameState.virusRisk > 20) {
+                    virusDisplay.textContent = 'Warning';
+                } else {
+                    virusDisplay.textContent = 'Safe';
+                    virusDisplay.className = '';
+                }
+            }
+            
+            if (miningDisplay) {
+                miningDisplay.textContent = gameState.gpuMining ? `+$${gameState.miningIncome}/s` : 'Off';
+                miningDisplay.className = gameState.gpuMining ? 'mining-active' : '';
+            }
+        }
+
         const translations = {
             en: {
                 title: 'PC BUILDER TYCOON',
@@ -1962,6 +2343,19 @@
             ramUsagePercent: 0,
             electricityMultiplier: 1.0, // News events can affect this
             totalElectricityCost: 0,
+            batteryLevel: 100,
+            isCharging: false,
+            batteryDrainRate: 1,
+            internetConnection: true,
+            internetSpeed: 100,
+            virusRisk: 0,
+            antivirusActive: false,
+            gpuMining: false,
+            miningIncome: 0,
+            cpuUsage: 0,
+            ramUsage: 0,
+            diskHealth: 100,
+            fanSpeed: 0,
             currentBuild: {
                 cpu: null,
                 motherboard: null,
@@ -1997,7 +2391,28 @@
             { id: 'support', name: { en: 'Tech Support', vi: 'Hỗ trợ kỹ thuật' }, cost: 100, unlock: 2, unlocked: false },
             { id: 'repair', name: { en: 'PC Repair', vi: 'Sửa máy tính' }, cost: 500, unlock: 10, unlocked: false },
             { id: 'build', name: { en: 'Custom Builds', vi: 'Ráp máy custom' }, cost: 2500, unlock: 50, unlocked: false },
-            { id: 'datacenter', name: { en: 'Data Center', vi: 'Trung tâm dữ liệu' }, cost: 15000, unlock: 300, unlocked: false }
+            { id: 'datacenter', name: { en: 'Data Center', vi: 'Trung tâm dữ liệu' }, cost: 15000, unlock: 300, unlocked: false },
+            { id: 'phishing', name: { en: 'Phishing Emails', vi: 'Email lừa đảo' }, cost: 50, unlock: 1, unlocked: false, scam: true },
+            { id: 'fakeshop', name: { en: 'Fake Online Shop', vi: 'Shop fake' }, cost: 200, unlock: 5, unlocked: false, scam: true },
+            { id: 'cryptoscam', name: { en: 'Crypto Scam', vi: 'Lừa đảo crypto' }, cost: 1000, unlock: 20, unlocked: false, scam: true },
+            { id: 'romance', name: { en: 'Romance Scam', vi: 'Lừa tình' }, cost: 500, unlock: 10, unlocked: false, scam: true },
+            { id: 'techsupport', name: { en: 'Fake Tech Support', vi: 'Giả support' }, cost: 300, unlock: 7, unlocked: false, scam: true },
+            { id: 'ransomware', name: { en: 'Ransomware Dev', vi: 'Làm ransomware' }, cost: 5000, unlock: 100, unlocked: false, scam: true }
+        ];
+
+        const topupPackages = [
+            { id: 'visa1', method: 'Visa/Mastercard', icon: 'fa-credit-card', amount: 1000, price: '$9.99', bonus: '+10%' },
+            { id: 'visa2', method: 'Visa/Mastercard', icon: 'fa-credit-card', amount: 5000, price: '$49.99', bonus: '+20%' },
+            { id: 'visa3', method: 'Visa/Mastercard', icon: 'fa-credit-card', amount: 10000, price: '$99.99', bonus: '+50%' },
+            { id: 'bank1', method: 'Bank Transfer', icon: 'fa-building-columns', amount: 2000, price: '$19.99', bonus: '+15%' },
+            { id: 'bank2', method: 'Bank Transfer', icon: 'fa-building-columns', amount: 8000, price: '$79.99', bonus: '+30%' },
+            { id: 'momo1', method: 'Momo', icon: 'fa-mobile', amount: 500, price: '$4.99', bonus: '+5%' },
+            { id: 'momo2', method: 'Momo', icon: 'fa-mobile', amount: 3000, price: '$29.99', bonus: '+10%' },
+            { id: 'paypal1', method: 'PayPal', icon: 'fa-paypal', amount: 1500, price: '$14.99', bonus: '+12%' },
+            { id: 'paypal2', method: 'PayPal', icon: 'fa-paypal', amount: 6000, price: '$59.99', bonus: '+25%' },
+            { id: 'crypto1', method: 'Cryptocurrency', icon: 'fa-bitcoin', amount: 2500, price: '$24.99', bonus: '+18%' },
+            { id: 'crypto2', method: 'Cryptocurrency', icon: 'fa-bitcoin', amount: 12000, price: '$119.99', bonus: '+40%' },
+            { id: 'zalo1', method: 'ZaloPay', icon: 'fa-z', amount: 800, price: '$7.99', bonus: '+8%' }
         ];
 
         const categories = {
@@ -2735,26 +3150,68 @@
         }
 
         function renderJobs() {
-            const t = translations[gameState.currentLang];
             const container = document.getElementById('jobs-list');
+            const t = translations[gameState.currentLang];
+            
             container.innerHTML = jobs.map(job => {
-                const unlocked = gameState.jobs[job.id] || false;
+                const unlocked = gameState.jobs[job.id];
                 const canAfford = gameState.money >= job.cost;
+                const canUnlock = gameState.incomePerClick >= job.unlock;
+                const jobName = job.name[gameState.currentLang];
+                const scamBadge = job.scam ? '<span class="scam-badge">SCAM</span>' : '';
                 
                 return `
-                    <div class="item ${unlocked ? 'owned' : ''}">
+                    <div class="item">
                         <div class="item-header">
-                            <span class="item-name">${job.name[gameState.currentLang]}</span>
-                            ${unlocked ? `<span class="item-level"><i class="fa fa-check"></i> ${t.owned}</span>` : ''}
+                            <div class="item-name">${jobName}${scamBadge}</div>
+                            ${unlocked ? `<div style="color: var(--accent-success); font-size: 0.9em;"><i class="fa fa-check"></i> ${t.unlocked}</div>` : ''}
                         </div>
                         <div class="item-stats">
-                            <span class="item-stat"><i class="fa fa-dollar-sign"></i> ${formatMoney(job.cost)}</span>
-                            <span class="item-stat"><i class="fa fa-arrow-up"></i> +${formatMoney(job.unlock)}/click</span>
+                            <div class="item-stat"><i class="fa fa-dollar-sign"></i> ${formatMoney(job.cost)}</div>
+                            <div class="item-stat"><i class="fa fa-arrow-up"></i> +${formatMoney(job.unlock)} ${t.perClick}</div>
                         </div>
-                        ${!unlocked ? `<button class="btn btn-success" onclick="unlockJob('${job.id}')" ${!canAfford ? 'disabled' : ''}>${t.unlock}</button>` : ''}
+                        ${!unlocked ? 
+                            `<button class="btn btn-primary" onclick="unlockJob('${job.id}')" ${!canAfford || !canUnlock ? 'disabled' : ''}>${t.unlock}</button>` :
+                            ''
+                        }
+                        ${!canUnlock && !unlocked ? `<div style="color: var(--accent-warning); font-size: 0.8em; margin-top: 5px;">Requires ${formatMoney(job.unlock)}/click</div>` : ''}
                     </div>
                 `;
             }).join('');
+        }
+
+        function renderTopUp() {
+            const container = document.getElementById('topup-grid');
+            
+            container.innerHTML = topupPackages.map(pkg => {
+                return `
+                    <div class="topup-card" onclick="processTopUp('${pkg.id}')">
+                        <div class="topup-icon">
+                            <i class="fa ${pkg.icon}"></i>
+                        </div>
+                        <div class="topup-method">${pkg.method}</div>
+                        <div class="topup-amount">$${pkg.amount.toLocaleString()}</div>
+                        <div class="topup-price">${pkg.price}</div>
+                        <div class="topup-bonus">${pkg.bonus} BONUS</div>
+                        <button class="btn-topup">Top Up</button>
+                    </div>
+                `;
+            }).join('');
+        }
+
+        function processTopUp(id) {
+            const pkg = topupPackages.find(p => p.id === id);
+            if (!pkg) return;
+            
+            const bonus = parseFloat(pkg.bonus.replace(/[^0-9.]/g, '')) / 100;
+            const totalAmount = pkg.amount * (1 + bonus);
+            
+            if (confirm(`Top up $${pkg.amount.toLocaleString()} + ${pkg.bonus} bonus?\n\nTotal: $${Math.floor(totalAmount).toLocaleString()}\nPrice: ${pkg.price}\n\n(Simulation - No real payment)`)) {
+                gameState.money += totalAmount;
+                showToast('success', 'TOP UP SUCCESS', `+$${Math.floor(totalAmount).toLocaleString()} added to your account!`);
+                updateUI();
+                saveGame();
+            }
         }
 
         let currentCategory = 'all';
@@ -3113,6 +3570,8 @@
             
             checkCompatibility();
             
+            updateAdvancedSystems(0.1);
+            
             const ocMultiplier = gameState.isOverclocked ? gameState.overclockMultiplier : 1;
             const effectiveIncome = gameState.incomePerSecond * ocMultiplier * gameState.efficiency;
             
@@ -3140,6 +3599,7 @@
             renderUpgrades();
             renderWorkers();
             renderJobs();
+            renderTopUp();
             renderCategories();
             renderMarketplace();
             renderInventory();
