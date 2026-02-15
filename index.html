@@ -971,6 +971,23 @@
             filter: grayscale(0.5);
         }
 
+        .sound-btn {
+            background: linear-gradient(145deg, #6b7280, #4b5563) !important;
+        }
+
+        .sound-btn::before {
+            background: linear-gradient(135deg, rgba(255,255,255,0.3) 0%, rgba(255,255,255,0) 70%) !important;
+        }
+
+        .sound-btn:hover:not(:disabled) {
+            background: linear-gradient(145deg, #9ca3af, #6b7280) !important;
+            box-shadow: 
+                0 6px 12px rgba(107, 114, 128, 0.4),
+                0 3px 6px rgba(0, 0, 0, 0.3),
+                inset 0 -3px 6px rgba(0, 0, 0, 0.4),
+                inset 0 2px 8px rgba(255, 255, 255, 0.4) !important;
+        }
+
         .reset-tooltip {
             position: absolute;
             top: 70px;
@@ -1484,6 +1501,104 @@
             font-size: 1.2em;
         }
 
+        .project-card {
+            background: var(--bg-card);
+            border: 2px solid var(--border);
+            border-radius: 12px;
+            padding: 30px 20px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-align: center;
+        }
+
+        .project-card:hover:not(.project-disabled) {
+            border-color: var(--accent-primary);
+            transform: translateY(-5px);
+            box-shadow: 0 8px 24px rgba(59, 130, 246, 0.3);
+        }
+
+        .project-disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+
+        .project-icon {
+            font-size: 4em;
+            margin-bottom: 15px;
+        }
+
+        .project-title {
+            font-size: 1.5em;
+            font-weight: 700;
+            color: var(--text-primary);
+            margin-bottom: 10px;
+        }
+
+        .project-desc {
+            color: var(--text-secondary);
+            line-height: 1.6;
+            margin-bottom: 15px;
+            min-height: 60px;
+        }
+
+        .project-tags {
+            display: flex;
+            gap: 8px;
+            justify-content: center;
+            flex-wrap: wrap;
+            margin-bottom: 20px;
+        }
+
+        .project-tag {
+            background: rgba(59, 130, 246, 0.1);
+            color: var(--accent-primary);
+            padding: 4px 12px;
+            border-radius: 20px;
+            font-size: 0.8em;
+            font-weight: 600;
+        }
+
+        .project-btn {
+            background: linear-gradient(135deg, var(--accent-primary), #2563eb);
+            color: white;
+            border: none;
+            padding: 12px 30px;
+            border-radius: 8px;
+            font-weight: 700;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-size: 1em;
+            width: 100%;
+        }
+
+        .project-btn:hover {
+            transform: scale(1.05);
+            box-shadow: 0 4px 12px rgba(59, 130, 246, 0.4);
+        }
+
+        .project-btn i {
+            margin-right: 8px;
+        }
+
+        .home-link {
+            color: var(--text-secondary);
+            text-decoration: none;
+            font-size: 0.95em;
+            transition: all 0.2s ease;
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .home-link:hover {
+            color: var(--accent-primary);
+            transform: translateY(-2px);
+        }
+
+        .home-link i {
+            font-size: 1.1em;
+        }
+
         .topup-warning {
             background: rgba(245, 158, 11, 0.1);
             border: 2px solid var(--accent-warning);
@@ -1704,7 +1819,7 @@
 
     <div class="container">
         <!-- News Ticker -->
-        <div class="news-ticker">
+        <div class="news-ticker" id="news-ticker-bar">
             <div class="news-ticker-content" id="news-ticker">
                 <div class="news-item">
                     <i class="fa fa-newspaper news-icon"></i>
@@ -1713,7 +1828,7 @@
             </div>
         </div>
 
-        <header>
+        <header id="game-header">
             <div class="header-content">
                 <h1 id="title">PC BUILDER TYCOON</h1>
                 <div class="stats-grid">
@@ -1726,8 +1841,8 @@
                         <div class="stat-value" id="income-per-click">$0.001</div>
                     </div>
                     <div class="stat-card">
-                        <div class="stat-label" id="label-auto">$/Sec</div>
-                        <div class="stat-value" id="income-per-sec">$0.00</div>
+                        <div class="stat-label" id="label-auto">$/Min</div>
+                        <div class="stat-value" id="income-per-sec">$0.00/min</div>
                     </div>
                     <div class="stat-card">
                         <div class="stat-label">Tax</div>
@@ -1744,6 +1859,9 @@
                 </select>
                 <button class="power-reset-btn" id="reset-btn" onclick="performReset()" title="Reset Game (1 per week)">
                     <i class="fa fa-power-off"></i>
+                </button>
+                <button class="power-reset-btn sound-btn" onclick="toggleSound()" title="Toggle Sound" style="right: 90px;">
+                    <i class="fa fa-volume-high" id="sound-icon"></i>
                 </button>
                 <div class="reset-tooltip" id="reset-cooldown">Available</div>
             </div>
@@ -2060,11 +2178,323 @@
             }
         });
 
+        function showLicense() {
+            const modal = document.getElementById('policy-modal');
+            const content = document.getElementById('policy-text');
+            content.innerHTML = `
+                <h1>License</h1>
+                <p class="policy-updated">Last Updated: February 14, 2026</p>
+                
+                <h2>MIT License</h2>
+                <p>Copyright (c) 2026 DonTRess Team</p>
+                
+                <p>Permission is hereby granted, free of charge, to any person obtaining a copy
+                of this software and associated documentation files (the "Software"), to deal
+                in the Software without restriction, including without limitation the rights
+                to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+                copies of the Software, and to permit persons to whom the Software is
+                furnished to do so, subject to the following conditions:</p>
+                
+                <p>The above copyright notice and this permission notice shall be included in all
+                copies or substantial portions of the Software.</p>
+                
+                <p><strong>THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+                IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+                FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+                AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+                LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+                OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+                SOFTWARE.</strong></p>
+                
+                <h2>Third-Party Resources</h2>
+                <ul>
+                    <li><strong>Font Awesome:</strong> Icons licensed under Font Awesome Free License</li>
+                    <li><strong>Google Fonts (Inter):</strong> Licensed under Open Font License</li>
+                </ul>
+                
+                <h2>Game Content</h2>
+                <p>All game mechanics, designs, and original content are property of DonTRess Team. 
+                Component names and specifications are used for educational and entertainment purposes.</p>
+            `;
+            modal.style.display = 'block';
+            document.body.style.overflow = 'hidden';
+        }
+
+        function showContact() {
+            const modal = document.getElementById('policy-modal');
+            const content = document.getElementById('policy-text');
+            content.innerHTML = `
+                <h1>Contact Us</h1>
+                <p class="policy-updated">Get in touch with DonTRess Team</p>
+                
+                <h2>Contact Information</h2>
+                <p>We'd love to hear from you! Whether you have feedback, bug reports, or just want to say hello.</p>
+                
+                <div style="background: var(--bg-card); padding: 20px; border-radius: 8px; margin: 20px 0;">
+                    <h3 style="margin-bottom: 15px;"><i class="fa fa-envelope"></i> Email</h3>
+                    <p style="font-size: 1.1em; color: var(--accent-primary);">contact@dontress.dev</p>
+                </div>
+                
+                <div style="background: var(--bg-card); padding: 20px; border-radius: 8px; margin: 20px 0;">
+                    <h3 style="margin-bottom: 15px;"><i class="fa fa-bug"></i> Bug Reports</h3>
+                    <p>Found a bug? Please include:</p>
+                    <ul>
+                        <li>Device type (Desktop/Mobile)</li>
+                        <li>Browser version</li>
+                        <li>Steps to reproduce</li>
+                        <li>Screenshot if possible</li>
+                    </ul>
+                </div>
+                
+                <div style="background: var(--bg-card); padding: 20px; border-radius: 8px; margin: 20px 0;">
+                    <h3 style="margin-bottom: 15px;"><i class="fa fa-lightbulb"></i> Feature Requests</h3>
+                    <p>Have an idea for a new feature? We're always looking to improve our games based on player feedback!</p>
+                </div>
+                
+                <h2>Social Media</h2>
+                <p style="color: var(--text-secondary);">Coming soon! Follow us for updates on new games and features.</p>
+                
+                <h2>Response Time</h2>
+                <p>We typically respond within 24-48 hours during business days.</p>
+            `;
+            modal.style.display = 'block';
+            document.body.style.overflow = 'hidden';
+        }
+
+        let audioContext = null;
+        const sounds = {
+            mechanicalKeyboard: null,
+            fanNoise: null,
+            moneyTing: null,
+            purchaseSound: null,
+            overclockHum: null,
+            componentExplosion: null,
+            bsodStatic: null,
+            virusAlert: null,
+            chargingBeep: null
+        };
+
+        function initAudioContext() {
+            if (!audioContext) {
+                audioContext = new (window.AudioContext || window.webkitAudioContext)();
+            }
+        }
+
+        function playMechanicalKeyboard() {
+            if (!gameState.soundEnabled || !audioContext) return;
+            
+            const osc = audioContext.createOscillator();
+            const gain = audioContext.createGain();
+            
+            osc.type = 'square';
+            osc.frequency.setValueAtTime(800 + Math.random() * 200, audioContext.currentTime);
+            
+            gain.gain.setValueAtTime(gameState.soundVolume * 0.1, audioContext.currentTime);
+            gain.gain.exponentialRampToValueAtTime(0.001, audioContext.currentTime + 0.05);
+            
+            osc.connect(gain);
+            gain.connect(audioContext.destination);
+            
+            osc.start();
+            osc.stop(audioContext.currentTime + 0.05);
+        }
+
+        function playFanNoise(intensity) {
+            if (!gameState.soundEnabled || !audioContext || intensity === 0) return;
+            
+            if (sounds.fanNoise) {
+                try {
+                    sounds.fanNoise.gain.gain.value = Math.min(intensity * gameState.soundVolume * 0.15, 0.3);
+                    sounds.fanNoise.filter.frequency.value = 100 + intensity * 50;
+                } catch(e) {}
+                return;
+            }
+            
+            const bufferSize = 4096;
+            const whiteNoise = audioContext.createScriptProcessor(bufferSize, 1, 1);
+            const filter = audioContext.createBiquadFilter();
+            const gain = audioContext.createGain();
+            
+            filter.type = 'lowpass';
+            filter.frequency.value = 100 + intensity * 50;
+            
+            gain.gain.value = Math.min(intensity * gameState.soundVolume * 0.15, 0.3);
+            
+            whiteNoise.onaudioprocess = function(e) {
+                const output = e.outputBuffer.getChannelData(0);
+                for (let i = 0; i < bufferSize; i++) {
+                    output[i] = Math.random() * 2 - 1;
+                }
+            };
+            
+            whiteNoise.connect(filter);
+            filter.connect(gain);
+            gain.connect(audioContext.destination);
+            
+            sounds.fanNoise = { node: whiteNoise, filter: filter, gain: gain };
+        }
+
+        function stopFanNoise() {
+            if (sounds.fanNoise) {
+                try {
+                    sounds.fanNoise.node.disconnect();
+                    sounds.fanNoise.filter.disconnect();
+                    sounds.fanNoise.gain.disconnect();
+                } catch(e) {}
+                sounds.fanNoise = null;
+            }
+        }
+
+        function playMoneyTing() {
+            if (!gameState.soundEnabled || !audioContext) return;
+            
+            const osc = audioContext.createOscillator();
+            const gain = audioContext.createGain();
+            
+            osc.type = 'sine';
+            osc.frequency.setValueAtTime(800, audioContext.currentTime);
+            osc.frequency.exponentialRampToValueAtTime(1200, audioContext.currentTime + 0.1);
+            
+            gain.gain.setValueAtTime(gameState.soundVolume * 0.3, audioContext.currentTime);
+            gain.gain.exponentialRampToValueAtTime(0.001, audioContext.currentTime + 0.2);
+            
+            osc.connect(gain);
+            gain.connect(audioContext.destination);
+            
+            osc.start();
+            osc.stop(audioContext.currentTime + 0.2);
+        }
+
+        function playPurchaseSound() {
+            if (!gameState.soundEnabled || !audioContext) return;
+            
+            const osc1 = audioContext.createOscillator();
+            const osc2 = audioContext.createOscillator();
+            const gain = audioContext.createGain();
+            
+            osc1.type = 'sine';
+            osc2.type = 'sine';
+            osc1.frequency.setValueAtTime(500, audioContext.currentTime);
+            osc2.frequency.setValueAtTime(700, audioContext.currentTime);
+            
+            gain.gain.setValueAtTime(gameState.soundVolume * 0.2, audioContext.currentTime);
+            gain.gain.exponentialRampToValueAtTime(0.001, audioContext.currentTime + 0.3);
+            
+            osc1.connect(gain);
+            osc2.connect(gain);
+            gain.connect(audioContext.destination);
+            
+            osc1.start();
+            osc2.start();
+            osc1.stop(audioContext.currentTime + 0.3);
+            osc2.stop(audioContext.currentTime + 0.3);
+        }
+
+        function playExplosion() {
+            if (!gameState.soundEnabled || !audioContext) return;
+            
+            const bufferSize = 4096;
+            const explosion = audioContext.createScriptProcessor(bufferSize, 1, 1);
+            const gain = audioContext.createGain();
+            
+            gain.gain.setValueAtTime(gameState.soundVolume * 0.5, audioContext.currentTime);
+            gain.gain.exponentialRampToValueAtTime(0.001, audioContext.currentTime + 0.5);
+            
+            explosion.onaudioprocess = function(e) {
+                const output = e.outputBuffer.getChannelData(0);
+                for (let i = 0; i < bufferSize; i++) {
+                    output[i] = (Math.random() * 2 - 1) * Math.exp(-i / bufferSize * 3);
+                }
+            };
+            
+            explosion.connect(gain);
+            gain.connect(audioContext.destination);
+            
+            setTimeout(() => {
+                explosion.disconnect();
+                gain.disconnect();
+            }, 500);
+        }
+
+        function playBSOD() {
+            if (!gameState.soundEnabled || !audioContext) return;
+            
+            const osc = audioContext.createOscillator();
+            const gain = audioContext.createGain();
+            
+            osc.type = 'sawtooth';
+            osc.frequency.setValueAtTime(50, audioContext.currentTime);
+            
+            gain.gain.setValueAtTime(gameState.soundVolume * 0.15, audioContext.currentTime);
+            gain.gain.linearRampToValueAtTime(0, audioContext.currentTime + 1);
+            
+            osc.connect(gain);
+            gain.connect(audioContext.destination);
+            
+            osc.start();
+            osc.stop(audioContext.currentTime + 1);
+        }
+
+        function playVirusAlert() {
+            if (!gameState.soundEnabled || !audioContext) return;
+            
+            for (let i = 0; i < 3; i++) {
+                setTimeout(() => {
+                    const osc = audioContext.createOscillator();
+                    const gain = audioContext.createGain();
+                    
+                    osc.type = 'square';
+                    osc.frequency.setValueAtTime(1000, audioContext.currentTime);
+                    
+                    gain.gain.setValueAtTime(gameState.soundVolume * 0.2, audioContext.currentTime);
+                    gain.gain.exponentialRampToValueAtTime(0.001, audioContext.currentTime + 0.1);
+                    
+                    osc.connect(gain);
+                    gain.connect(audioContext.destination);
+                    
+                    osc.start();
+                    osc.stop(audioContext.currentTime + 0.1);
+                }, i * 150);
+            }
+        }
+
+        function playChargingBeep() {
+            if (!gameState.soundEnabled || !audioContext) return;
+            
+            const osc = audioContext.createOscillator();
+            const gain = audioContext.createGain();
+            
+            osc.type = 'sine';
+            osc.frequency.setValueAtTime(600, audioContext.currentTime);
+            
+            gain.gain.setValueAtTime(gameState.soundVolume * 0.15, audioContext.currentTime);
+            gain.gain.exponentialRampToValueAtTime(0.001, audioContext.currentTime + 0.15);
+            
+            osc.connect(gain);
+            gain.connect(audioContext.destination);
+            
+            osc.start();
+            osc.stop(audioContext.currentTime + 0.15);
+        }
+
+        function toggleSound() {
+            gameState.soundEnabled = !gameState.soundEnabled;
+            const icon = document.getElementById('sound-icon');
+            if (icon) {
+                icon.className = gameState.soundEnabled ? 'fa fa-volume-high' : 'fa fa-volume-xmark';
+            }
+            if (!gameState.soundEnabled) {
+                stopFanNoise();
+            }
+            showToast('info', 'SOUND', gameState.soundEnabled ? 'Sound enabled' : 'Sound disabled');
+        }
+
         function toggleCharging() {
             gameState.isCharging = !gameState.isCharging;
             const btn = document.getElementById('charge-toggle');
             if (gameState.isCharging) {
                 btn.classList.add('active');
+                playChargingBeep();
                 showToast('info', 'CHARGING', 'Battery charging enabled');
             } else {
                 btn.classList.remove('active');
@@ -2081,6 +2511,7 @@
                     renderMarketplace();
                 }
             } else {
+                playChargingBeep();
                 showToast('success', 'ONLINE', 'Internet connected');
             }
         }
@@ -2088,6 +2519,7 @@
         function toggleAntivirus() {
             gameState.antivirusActive = !gameState.antivirusActive;
             if (gameState.antivirusActive) {
+                playChargingBeep();
                 showToast('success', 'PROTECTED', 'Antivirus enabled - Virus risk reduced!');
             } else {
                 showToast('warning', 'UNPROTECTED', 'Antivirus disabled - Higher virus risk!');
@@ -2114,6 +2546,13 @@
         }
 
         function updateAdvancedSystems(deltaTime) {
+            const fanIntensity = Math.max(0, (gameState.temperature - 40) / 60);
+            if (fanIntensity > 0.1) {
+                playFanNoise(fanIntensity);
+            } else {
+                stopFanNoise();
+            }
+            
             if (!gameState.isCharging && gameState.batteryLevel > 0) {
                 const drainRate = gameState.batteryDrainRate;
                 gameState.batteryLevel -= drainRate * deltaTime;
@@ -2141,6 +2580,7 @@
                     const loss = gameState.money * 0.1;
                     gameState.money -= loss;
                     gameState.virusRisk = 0;
+                    playVirusAlert();
                     showToast('error', 'VIRUS ATTACK', `Lost ${formatMoney(loss)} to ransomware!`);
                 }
             } else {
@@ -2356,6 +2796,8 @@
             ramUsage: 0,
             diskHealth: 100,
             fanSpeed: 0,
+            soundEnabled: true,
+            soundVolume: 0.5,
             currentBuild: {
                 cpu: null,
                 motherboard: null,
@@ -2909,6 +3351,7 @@
         }
 
         function triggerBSOD() {
+            playBSOD();
             const stopCodes = [
                 'CRITICAL_PROCESS_DIED',
                 'SYSTEM_SERVICE_EXCEPTION',
@@ -2955,6 +3398,7 @@
         }
 
         function triggerComponentExplosion() {
+            playExplosion();
             const t = translations[gameState.currentLang];
             const cpusAndGpus = allMarketItems.filter(i => i.owned && (i.category === 'cpu' || i.category === 'gpu'));
             
@@ -3026,10 +3470,17 @@
         }
 
         document.getElementById('click-btn').addEventListener('click', function(e) {
+            initAudioContext();
+            playMechanicalKeyboard();
+            
             const ocMultiplier = gameState.isOverclocked ? gameState.overclockMultiplier : 1;
             const income = gameState.incomePerClick * ocMultiplier * gameState.efficiency;
             gameState.money += income;
             gameState.exp += 1;
+            
+            if (income > 0) {
+                playMoneyTing();
+            }
             
             const float = document.createElement('div');
             float.className = 'float-number';
@@ -3056,9 +3507,20 @@
             const ocMultiplier = gameState.isOverclocked ? gameState.overclockMultiplier : 1;
             document.getElementById('money').textContent = formatMoney(gameState.money);
             document.getElementById('income-per-click').textContent = formatMoney(gameState.incomePerClick * ocMultiplier);
-            document.getElementById('income-per-sec').textContent = formatMoney(gameState.incomePerSecond * ocMultiplier * gameState.efficiency);
+            document.getElementById('income-per-sec').textContent = formatMoney(gameState.incomePerSecond * ocMultiplier * gameState.efficiency * 60) + '/min';
             document.getElementById('level').textContent = gameState.level;
             document.getElementById('click-value-text').textContent = formatMoney(gameState.incomePerClick * ocMultiplier * gameState.efficiency);
+            
+            const homeProgress = document.getElementById('home-progress');
+            if (homeProgress) {
+                homeProgress.innerHTML = `
+                    <div>💰 Money: <strong>${formatMoney(gameState.money)}</strong></div>
+                    <div>📈 Level: <strong>${gameState.level}</strong></div>
+                    <div>🔥 Income: <strong>${formatMoney(gameState.incomePerSecond * ocMultiplier * gameState.efficiency * 60)}/min</strong></div>
+                    <div>🌡️ Temp: <strong>${Math.round(gameState.temperature)}°C</strong></div>
+                `;
+            }
+            
             updateSystemStatsUI();
         }
 
@@ -3498,6 +3960,7 @@
             if (gameState.money >= item.price && !item.owned) {
                 gameState.money -= item.price;
                 item.owned = true;
+                playPurchaseSound();
                 
                 if (item.isBlackMarket) {
                     const roll = Math.random();
@@ -3616,6 +4079,33 @@
         gameState.resetBonus = false;
 
         function performReset() {
+            const modal = document.createElement('div');
+            modal.className = 'policy-modal';
+            modal.style.display = 'block';
+            modal.innerHTML = `
+                <div class="policy-content" style="max-width: 500px; text-align: center;">
+                    <h1 style="color: #ef4444; margin-bottom: 20px;">⚠️ RESET OPTIONS</h1>
+                    <p style="margin-bottom: 30px;">Choose your action:</p>
+                    
+                    <button class="btn-reset" style="margin-bottom: 15px;" onclick="doGameReset()">
+                        <i class="fa fa-rotate-right"></i> RESET GAME
+                        <div style="font-size: 0.8em; opacity: 0.8;">Clear progress, 0.0001% lottery chance</div>
+                    </button>
+                    
+                    <button class="btn-reset" style="background: linear-gradient(135deg, #6b7280, #4b5563);" onclick="quitForever()">
+                        <i class="fa fa-door-open"></i> QUIT FOREVER
+                        <div style="font-size: 0.8em; opacity: 0.8;">Tired of this game? Leave permanently</div>
+                    </button>
+                    
+                    <button class="btn" style="margin-top: 20px; width: 100%;" onclick="this.closest('.policy-modal').remove()">
+                        Cancel
+                    </button>
+                </div>
+            `;
+            document.body.appendChild(modal);
+        }
+
+        function doGameReset() {
             const now = Date.now();
             const weekMs = 7 * 24 * 60 * 60 * 1000;
             
@@ -3648,6 +4138,50 @@
             }
             
             location.reload();
+        }
+
+        function quitForever() {
+            if (!confirm('Are you sure you want to quit FOREVER? This will close the game and mark you as permanently tired of it.')) return;
+            
+            localStorage.setItem('pcTycoonQuit', 'true');
+            localStorage.setItem('quitReason', 'Player chose to quit forever - tired of game');
+            localStorage.setItem('quitTimestamp', Date.now());
+            
+            document.body.innerHTML = `
+                <div style="display: flex; align-items: center; justify-content: center; height: 100vh; background: linear-gradient(135deg, #1a1a1a, #2a2a2a); color: white; text-align: center; font-family: Inter, sans-serif;">
+                    <div style="max-width: 600px; padding: 40px;">
+                        <h1 style="font-size: 3em; margin-bottom: 20px; color: #3b82f6;">👋 Goodbye!</h1>
+                        <p style="font-size: 1.2em; color: #9ca3af; margin-bottom: 30px;">
+                            Thank you for playing PC Builder Tycoon.<br>
+                            We understand you're tired of the game.
+                        </p>
+                        <p style="font-size: 0.9em; color: #6b7280;">
+                            This window will close in <span id="countdown">5</span> seconds...<br>
+                            <small>Or you can close it manually</small>
+                        </p>
+                        <div style="margin-top: 40px; padding-top: 20px; border-top: 1px solid #404040;">
+                            <small style="color: #6b7280;">
+                                Clear browser data to play again<br>
+                                Your feedback: Quit at ${formatMoney(gameState.money)} | Level ${gameState.level}
+                            </small>
+                        </div>
+                    </div>
+                </div>
+            `;
+            
+            let countdown = 5;
+            const interval = setInterval(() => {
+                countdown--;
+                const el = document.getElementById('countdown');
+                if (el) el.textContent = countdown;
+                if (countdown <= 0) {
+                    clearInterval(interval);
+                    window.close();
+                    setTimeout(() => {
+                        window.location.href = 'about:blank';
+                    }, 100);
+                }
+            }, 1000);
         }
 
         const originalUpdateHeatSystem = updateHeatSystem;
